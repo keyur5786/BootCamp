@@ -1,0 +1,60 @@
+<link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="wrapper">
+
+  <nav class="navbar navbar-default" style="z-index: 2;">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">BootCamp</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        <!-- <li><a href="/#">Admin</a></li> -->
+      </ul>
+    </div>
+  </nav>
+
+        <div class="container">
+            <br />
+            <p class="w3-text-white">Become a Professional Front End Developer</p>
+
+            <form class="form">
+               <br /><br />
+                   <!-- <input type="text" [(ngModel)]="txtProgramType" name="programType" placeholder="Program Type"> -->
+                   <select [(ngModel)]="txtProgramType" name="programType" class="sp btn-select-light">
+                     <option value="">---Select Program---</option>
+                     <option *ngFor="let type of ProgramTypeArray" [value]="type.id">{{type.name}}</option>
+                   </select>
+
+                  <input list="program" [(ngModel)]="txtProgramName" name="txtProgramName" placeholder="Program Name" style="height: 43px;">
+                  <datalist id="program">
+                  <option *ngFor="let data of cources">{{data.ProgramName}}</option>
+                  </datalist>
+
+                <input list="locat" [(ngModel)]="txtLocation" name="txtLocation" placeholder="Location" style="height: 43px;">
+
+                <datalist id="locat">
+                <option *ngFor="let data of locations">{{data.Loc_name}}</option>
+                </datalist>
+
+                <button (click)="GoForSearch()"><b><i class="fa fa-search"></i>Search</b></button>
+            </form>
+
+        </div>
+
+        <ul class="bg-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>

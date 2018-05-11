@@ -1,0 +1,47 @@
+<style>
+.navbar-nav
+{
+    display: -ms-flexbox;
+    display: flex;
+   -ms-flex-direction: row;
+      flex-direction: row;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+li .curser{
+  color: white!important;
+}
+.glyphicon {
+    top: 4px;
+  }
+/* div{
+  background-color: #20c997!important;
+}
+/* ul{color: #817977!important;}
+a{color: #817977!important;} */
+</style>
+<link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">BootCamp</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <!-- <li class="active"><a href="#">Home</a></li>
+      <li><a href="/user"> User </a></li>
+      <li><a href="/cource"> Course </a></li>
+      <li><a href="/academy"> Academy </a></li>
+     <li><a href="/uploadFile"> Upload-Test </a></li>
+      <li><a href="/location"> Location </a></li>
+       <li><a href="/program-status"> Program Status </a></li>
+      <li><a href="/imageupload"> ImageUpload </a></li> -->
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+
+        <li style="color:white!important;margin-right: 37px;font-size:20px;">{{LoggerName}}</li>
+        <li (click)="logout()" style="color:#9d9d9d; cursor:pointer;"><span class="glyphicon glyphicon-log-out" >Logout</span> </li>
+    </ul>
+  </div>
+</nav>

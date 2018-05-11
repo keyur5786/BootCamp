@@ -1,0 +1,58 @@
+<!-- menubar -->
+<link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="wrapper">
+
+  <nav class="navbar navbar-default" style="z-index: 2;">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">BootCamp</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        <!-- <li><a href="/#">Admin</a></li> -->
+      </ul>
+    </div>
+  </nav>
+
+  <div class="col-md-9 container text-center">
+  <div style="position:fixed; top:20px;"><flash-messages></flash-messages></div>
+  <h3 align="center" style="padding-top:10px;"> Inquiry</h3>
+<form (submit)="onInquiry()">
+<!-- <form (submit) = "addUser()" -->
+  <div class="form-group" class="fmargin" align="center">
+    <div class="col-xs-3">
+    <!-- <label>AcademyId</label> -->
+    <input class="form-control" type="text" [(ngModel)]="AcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+  </div>
+
+<div class="col-xs-3">
+<label>Phone No</label>
+<input class="form-control" type="text"  [(ngModel)]="Phone" name="Phone">
+</div>
+
+<div class="col-xs-3">
+<label style="margin-right: 16px;">EmailId</label>
+<input class="form-control ptxt" type="text"   [(ngModel)]="EmailId" name="EmailId">
+</div>
+
+<div class="col-xs-3">
+<label style="margin-right: 26px;">Name</label>
+<input class="form-control ptxt" type="text"  [(ngModel)]="Name" name="Name">
+</div>
+
+<div class="col-xs-3">
+<label style="margin-right: 25px;">Notes</label>
+<input class="form-control ptxt" type="Notes"  [(ngModel)]="Notes" name="Notes">
+</div>
+
+  <br>
+  <div class="text-center">
+  <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+</div>
+</div>
+</form>
+</div>

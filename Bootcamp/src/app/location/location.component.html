@@ -1,0 +1,72 @@
+<app-navbar></app-navbar>
+<style>
+.table th{
+  padding:0px;
+  text-align: center;
+  color:white;
+  border-color: black;
+}
+
+td{
+    text-align: center;
+    padding: 0px;
+}
+.tbtn{
+  padding: 0px;
+
+}
+</style>
+
+<div class="container">
+  <div style="position:fixed; top:100px; right:20px;"> <flash-messages></flash-messages> </div>
+  <form (submit) = "addLocate()" *ngIf="!toggleForm">
+      <h2 class="page-header" style="text-align:center;padding-top: 35px;">Location</h2>
+      <br/>
+      <div class="text-center">
+               <label>Location Name</label>
+               <input type="text" [(ngModel)]="Loc_name" name="Loc_name" maxlength="50">
+      </div>
+<br/>
+      <div class="text-center">
+          <button type="submit" name="submit" class="btn btn-primary" value="Save">Save</button>
+      </div>
+ </form>
+
+ <form #editfrm="ngForm" (ngSubmit)="editLocate(editfrm)" *ngIf="toggleForm" align="center">
+ <h2 class="page-header" style="text-align:center;padding-top:35px;"> Edit Location</h2>
+ <br/>
+ <div class="text-center">
+          <label>Location Name</label>
+          <input type="text" [ngModel]="location.Loc_name" name="Loc_name" maxlength="50">
+ </div>
+<br/>
+ <div class="text-center">
+     <button type="submit" name="submit" class="btn btn-primary" value="Save">Save</button>
+ </div>
+</form>
+</div>
+
+<div class="col-md-12">
+  <h2 class="page-header" style="text-align:center;"> Location List </h2>
+<br/>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="btn-primary">
+        <th>Location Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let locate of locations">
+        <td>{{ locate.Loc_name }}</td>
+        <td>
+          <form>
+            <button type="button" name="button" (click)="deletelocate(locate._id,locate.Loc_name)" value="Delete" class="btn btn-danger tbtn">Delete</button>
+            <button type="button" name="button" class="btn btn-primary tbtn" (click)="showEditForm(locate)"> Edit </button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

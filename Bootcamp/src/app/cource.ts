@@ -1,0 +1,26 @@
+export class Cource{
+  _id?:string;
+  AcademyId:string;
+  ProgramType:string;
+  ProgramDuration:number;
+  ProgramName:string;
+  ProgramDescription:string;
+  ProgramSubject:string;
+  ProgramLocationId:string;
+  Cost:number;
+  StartDate:string;
+  EndDate?:string;
+  Length:number;
+  Classsize:string;
+  Commitment:string;
+  CareerServices?:boolean;
+  Financing?:boolean;
+  Scholarship?:boolean;
+  CreatedBy?:string;
+  UpdatedBy?:string;
+  CreatedIp?:string;
+  UpdatedIp?:string;
+  CreatedOn?:string;
+  UpdatedOn?:any;
+  Active?:boolean;
+}

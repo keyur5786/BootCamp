@@ -1,0 +1,30 @@
+.form-control {
+      display: inline;
+      width: 60%!important;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+  .fmargin{
+        margin-top: 25px;
+  }
+   .col-md-9 {
+    max-width: 30%!important;
+    }
+    .col-xs-3 {
+        width: 100%;
+    }
+    .col-md-9 {
+    float: initial;
+}
+  .navbar-nav {
+         display: -ms-flexbox;
+         display: flex;
+         -ms-flex-direction: row;
+         flex-direction: row;
+         padding-left: 0;
+         margin-bottom: 0;
+         list-style: none;
+     }
+     .navbar-default {
+      background-color: #bfcaca!important;
+    }

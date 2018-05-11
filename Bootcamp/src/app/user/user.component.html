@@ -1,0 +1,154 @@
+<app-navbar></app-navbar>
+<style>
+.table th{
+  padding:0px;
+  text-align: center;
+
+  color:white;
+  border-color: black;
+}
+
+td{
+    text-align: center;
+    padding: 0px;
+}
+body{
+  background-color: #ddd!important;
+}
+.un{
+margin-left: 7px;
+}
+
+.tbtn{
+  padding: 0px;
+
+}
+</style>
+<div class="container">
+    <div style="position:fixed; top:100px; right:20px;"> <flash-messages></flash-messages> </div>
+  <form (submit) = "addUser()" *ngIf="!toggleForm">
+      <h2 class="page-header" style="text-align:center;padding-top: 35px;">User</h2>
+      <br/>
+      <div class="row">
+
+               <label class="un">FirstName </label>
+               <input type="text" [(ngModel)]="FirstName" name="FirstName"  class="un">
+
+               <label class="un">LastName </label>
+               <input type="text" [(ngModel)]="LastName" name="LastName" class="un" >
+
+                    <label class="un">UserName </label>
+                    <input type="text" [(ngModel)]="UserName" name="UserName" class="un" >
+
+                    <label class="un">Password </label>
+                    <input type="password" [(ngModel)]="Password" name="Password" class="un"  >
+
+                </div>
+<br/>
+
+
+
+    <!-- <div class="form-group">
+      RoleId <input type="text" [(ngModel)]="RoleId" name="RoleId" clss="form-control">
+    </div> -->
+    <div class="text-center">
+    <button type="submit" name="submit" class="btn btn-primary" align="center" value="Save"> Save </button>
+</div>
+  </form>
+
+<form #editfrm="ngForm" (ngSubmit)="editUser(editfrm)" *ngIf="toggleForm">
+<h2 class="page-header" style="text-align:center;padding-top: 35px;"> Edit User</h2>
+<div class="row">
+
+         <label class="un">FirstName </label>
+         <input type="text" [ngModel]="user.FirstName" name="FirstName" class="un" >
+
+         <label class="un">LastName </label>
+         <input type="text" [ngModel]="user.LastName" name="LastName" class="un">
+
+              <label class="un"> UserName </label>
+              <input type="text" [ngModel]="user.UserName" name="UserName" class="un" >
+
+              <label class="un">Password </label>
+              <input type="password" [ngModel]="user.Password" name="Password"  class="un" >
+
+          </div>
+<br/>
+
+
+
+<!-- <div class="form-group">
+  <label for=""> RoleId : </label>
+  <input type="text" name="RoleId" class="form-control" [ngModel]="user.RoleId">
+</div> -->
+<div class="text-center">
+<button type="submit" name="submit" class="btn btn-primary" align="center"> Save </button>
+</div>
+</form>
+<br/>
+</div>
+
+<div class="col-md-12">
+  <h2 class="page-header" style="text-align:center;">Users List</h2>
+  <table class="table table-bordered ">
+    <thead>
+      <tr class="btn-primary">
+        <!-- <th>UserId</th> -->
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>UserName</th>
+        <th>Action</th>
+        <!-- <th>RoleId</th>
+        <th>Delete</th>
+        <th>Edit</th>-->
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let user of users">
+        <!-- <td>{{ user.UserId }}</td> -->
+        <td>{{ user.FirstName }}</td>
+        <td>{{ user.LastName }}</td>
+        <td>{{ user.UserName }}</td>
+        <!-- <td>{{ user.RoleId }}</td> -->
+        <td>
+          <form>
+            <button type="submit" name="submit" (click)="deleteuser(user._id,user.UserName)" value="Delete" class="btn btn-danger tbtn">Delete</button>
+<button type="submit" name="submit" class="btn btn-primary tbtn" (click)="showEditForm(user)"> Edit </button>
+</form>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- <div class="container">
+  <div *ngFor = "let user of users" class="row">
+    <div class="col-md-4">
+      {{user.UserId}}
+    </div>
+    <div class="col-md-4">
+      {{user.FirstName}}
+    </div>
+    <div class="col-md-4">
+      {{user.LastName}}
+    </div>
+    <div class="col-md-4">
+      {{user.UserName}}
+    </div>
+    <div class="col-md-4">
+      {{user.Password}}
+    </div>
+    <div class="col-md-4">
+      {{user.RoleId}}
+    </div>
+    <div class="col-md-4">
+        <input type="button" (click)="deleteuser(user._id)" value="Delete" class="btn btn-danger">
+        <br><br>
+    </div>
+    <div class="col-md-4">
+     <button type="button" name="button" class="btn btn-primary" (click)="showEditForm(user)" [disabled]="toggleForm"> Edit </button>
+   </div>
+   <br><br>
+  </div>
+</div> -->

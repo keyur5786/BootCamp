@@ -1,0 +1,27 @@
+<div class="container">
+<div style="position:fixed; top:20px;"> <flash-messages></flash-messages> </div>
+<form (submit)="onRegister()">
+<!-- <form (submit) = "addUser()" -->
+  <div class="form-group" class="fmargin" align="center">
+    <div class="col-xs-3">
+    <label>EmailId</label>
+    <input class="form-control" type="text" [(ngModel)]="EmailId" name="EmailId" style="margin-left: 65px;">
+  </div>
+
+<div class="col-xs-3">
+<label>Password</label>
+<input class="form-control" type="password"  [(ngModel)]="Password" name="Password" style="margin-left: 54px;">
+</div>
+
+<div class="col-xs-3">
+<label>ConfirmPassword</label>
+<input class="form-control ptxt" type="password"  [(ngModel)]="ConfirmPassword" name="ConfirmPassword">
+</div>
+
+  <br/>
+  <div class="text-center">
+  <button type="submit" name="submit" class="btn btn-primary" value="Register">Register</button>
+</div>
+</div>
+</form>
+</div>

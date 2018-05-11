@@ -1,0 +1,14 @@
+.form-control {
+      display: inline;
+      width: 60%!important;
+      padding: 3px;
+       margin-bottom: 5px;
+    }
+  .fmargin{
+        margin-top: 25px;
+  }
+  .col-md-9 {
+    max-width: 30%!important;
+  padding-bottom: 25px!important;
+    }
+  /* .ptxt{margin-left: 12px;} */

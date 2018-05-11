@@ -1,0 +1,178 @@
+<app-navbar></app-navbar>
+<div class="container">
+<div style="position:fixed; top:100px; right:20px;"> <flash-messages></flash-messages> </div>
+  <form (submit) = "addAcademy()" *ngIf="!toggleForm" name="academyForm" method="post" enctype="multipart/form-data">
+    <h2 class="page-header" style="text-align:center;padding-top:35px;">Academy</h2>
+    <br/>
+  <div class="row">
+    <div class="col-sm-4">
+      <label>Academy Name</label>
+       <input type="text" [(ngModel)]="AcademyName" name="AcademyName" class="an">
+    </div>
+    <div class="col-sm-4">
+      <label>AcademyWebsite</label>
+       <input type="url" [(ngModel)]="AcademyWebsite" name="AcademyWebsite" class="web" >
+    </div>
+    <div class="col-sm-4">
+      <label>EmailId</label>
+      <input type="text" [(ngModel)]="EmailId" name="EmailId" class="mail">
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+    <label>AcademyDiscription</label>
+    <textarea name="AcademyDiscription" rows="1" [(ngModel)]="AcademyDiscription" class="desc" ></textarea>
+    </div>
+    <div class="col-sm-4">
+      <label>ZipCode</label>
+      <input type="text" [(ngModel)]="ZipCode" name="ZipCode" class="zip" >
+    </div>
+    <div class="col-sm-4">
+      <label>Password</label>
+      <input type="password" [(ngModel)]="Password" name="Password" class="psw">
+    </div>
+
+  </div>
+  <div class="row">
+    <!-- <div class="col-sm-4">
+      <label>AcademyProfileImage</label>
+      <input type="text" [(ngModel)]="AcademyProfileImage" name="AcademyProfileImage">
+    </div> -->
+    <div class="col-sm-4">
+          <label>Headquarters</label>
+         <input type="text" [(ngModel)]="Headquarters" name="Headquarters" class="hd">
+    </div>
+    <div class="col-sm-4">
+        <label>AcademyFounded</label>
+        <input type="text" [(ngModel)]="AcademyFounded" name="AcademyFounded" class="af">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <label>AcademyLogo</label>
+      <!-- <input type="text" [(ngModel)]="AcademyLogo" name="AcademyLogo" class="logo"> -->
+      <input name="file" id="file" type="file" (change)="fileChange($event)" />
+    </div>
+  </div>
+<div class="col-md-12 text-center">
+  <button type="submit" name="submit" class="btn btn-primary" value="Save">Save</button>
+  <!-- <input type="submit" class="btn btn-primary" value="Save"> -->
+</div>
+</form>
+
+
+<form #editfrm="ngForm" (ngSubmit)="editAcademy(editfrm)" *ngIf="toggleForm"  method="post" enctype="multipart/form-data">
+<h2 class="page-header" style="text-align:center;padding-top:35px;"> Edit Academy </h2>
+<br/>
+<div class="row">
+<div class="col-sm-4">
+<label>Academy Name</label>
+<input type="text" [ngModel]="Academy.AcademyName" name="AcademyName" class="an">
+</div>
+<div class="col-sm-4">
+  <label>AcademyWebsite</label>
+  <input type="url" [ngModel]="Academy.AcademyWebsite" name="AcademyWebsite" class="web">
+</div>
+<div class="col-sm-4">
+  <label>EmailId</label>
+  <input type="text" [ngModel]="Academy.EmailId" name="EmailId" class="mail">
+</div>
+</div>
+
+<div class="row">
+
+</div>
+<div class="row">
+<div class="col-sm-4">
+<label >AcademyDiscription</label>
+  <textarea name="AcademyDiscription" rows="1" [ngModel]="Academy.AcademyDiscription" class="desc"></textarea>
+  <!-- AcademyDiscription <input type="text" [ngModel]="Academy.AcademyDiscription" name="AcademyDiscription" clss="form-controller"> -->
+</div>
+<div class="col-sm-4">
+<label >ZipCode </label>
+  <input type="text" [ngModel]="Academy.ZipCode" name="ZipCode" class="zip">
+</div>
+<div class="col-sm-4">
+  <label>Password</label>
+  <input type="password" [ngModel]="Academy.Password" name="Password" class="psw">
+</div>
+
+</div>
+<div class="row">
+<!-- <div class="col-sm-4">
+  <label>AcademyProfileImage</label>
+  <input type="text" [ngModel]="Academy.AcademyProfileImage" name="AcademyProfileImage" >
+</div> -->
+<div class="col-sm-4">
+  <label >Headquarters </label>
+   <input type="text" [ngModel]="Academy.Headquarters" name="Headquarters" class="hd">
+</div>
+
+<div class="col-sm-4">
+<label>AcademyFounded</label>
+<input type="text" [ngModel]="Academy.AcademyWebsite" name="AcademyFounded" class="af">
+</div>
+
+
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <label>AcademyLogo</label>
+     <!-- <input type="text" [ngModel]="Academy.AcademyLogo" name="AcademyLogo" class="logo" > -->
+
+      <!-- <input name="fileE" id="fileE" type="file" (change)="fileChange($event)" /><br> -->
+      <!-- <button type="submit" (click)="UploadImage()">Upload</button> -->
+</div>
+  </div>
+<br/>
+<div class="col-md-12 text-center">
+<button type="submit" name="submit" class="btn btn-primary">Save</button>
+</div>
+<h1> Hi </h1>
+</form>
+
+</div>
+
+
+<div class="col-md-12">
+  <h2 class="page-header" style="text-align:center;"> Academy List </h2>
+  <table class="table table-bordered">
+    <thead>
+
+      <tr class="btn-primary">
+        <th>AcademyName</th>
+        <th>AcademyWebsite</th>
+        <th>AcademyLogo</th>
+        <!-- <th>AcademyProfileImage</th> -->
+        <th>AcademyFounded</th>
+        <th>Headquarters</th>
+        <th>AcademyDiscription</th>
+        <th>ZipCode</th>
+        <th>EmailId</th>
+        <th>Action</th>
+      </tr>
+
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of academies">
+
+        <td>{{ data.AcademyName }}</td>
+        <td>{{ data.AcademyWebsite }}</td>
+        <td><img src="../../assets/{{ data.AcademyLogo }}" height="50px" width="50px"></td>
+        <!-- <td>{{ data.AcademyLogo }}</td> -->
+        <td>{{ data.AcademyFounded }}</td>
+        <td>{{ data.Headquarters }}</td>
+        <td>{{ data.AcademyDiscription }}</td>
+        <td>{{ data.ZipCode }}</td>
+        <td>{{ data.EmailId }}</td>
+        <td>
+          <form>
+            <button type="button" name="button" (click)="deleteAcademy(data._id)" value="Delete" class="btn btn-danger tbtn">Delete</button>
+            <button type="button" name="button" class="btn btn-primary tbtn" (click)="showEditForm(data)"> Edit </button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

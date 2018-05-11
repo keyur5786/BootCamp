@@ -1,0 +1,74 @@
+
+<link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="wrapper">
+
+  <nav class="navbar navbar-default" style="z-index: 2;">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">BootCamp</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        <!-- <li><a href="/#">Admin</a></li> -->
+      </ul>
+    </div>
+  </nav>
+
+
+<div class="col-md-12">
+<table class="table table-bordered" style="">
+  <thead>
+    <tr class="btn-primary">
+      <th>Academy</th>
+       <th>ProgramName</th>
+      <th>ProgramType</th>
+      <th>ProgramDuration</th>
+
+      <!-- <th>ProgramDescription</th> -->
+      <!-- <th>ProgramSubject</th> -->
+      <!-- <th>ProgramLocation</th> -->
+      <th>Cost</th>
+      <th>Career Services</th>
+      <th>Financing</th>
+      <th>Scholership</th>
+      <!-- <th>StartDate</th>
+      <th>Length</th>
+      <th>Classsize</th>
+      <th>Commitment</th> -->
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody >
+    <tr *ngFor = "let cource of SearchData">
+      <td>{{cource.AcademyId?.AcademyName}}</td>
+      <td>{{ cource.ProgramName }}</td>
+      <td *ngIf="cource.ProgramType==1">Front End Web Application Development</td>
+      <td *ngIf="cource.ProgramType==2">Full Stack Applicationd Development</td>
+      <td *ngIf="cource.ProgramType==3">User Experience Design</td>
+
+      <td>{{ cource.ProgramDuration }}</td>
+
+      <!-- <td>{{ cource.ProgramDescription }}</td> -->
+      <!-- <td>{{ cource.ProgramSubject }}</td> -->
+      <!-- <td>{{ cource.ProgramLocationId?.Loc_name }}</td> -->
+       <td>{{ cource.Cost }}</td>
+       <td></td>
+       <td></td>
+       <td></td>
+
+      <!--<td>{{ cource.StartDate }}</td>
+      <td>{{ cource.Length }}</td>
+      <td>{{ cource.Classsize }}</td>
+      <td>{{ cource.Commitment }}</td> -->
+      <td>
+        <button type="button" (click)="ShowDetails(cource._id,cource.AcademyId._id)"><b><i class="fa fa-search"></i>Details</b></button>&nbsp;
+        <button type="button" (click)="DirectInquiry(cource._id,cource.AcademyId._id)"><b><i class="fa fa-search"></i>Direct Inquiry</b></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>

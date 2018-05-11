@@ -1,0 +1,26 @@
+{
+  "name": "development",
+  "version": "1.0.0",
+  "description": "BootCamp Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Keyur",
+  "license": "ISC",
+  "dependencies": {
+    "angular2-flash-messages": "^2.0.5",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "formidable": "^1.2.1",
+    "ipware": "^1.0.0",
+    "jsonwebtoken": "^8.2.1",
+    "moment": "^2.22.1",
+    "mongoose": "^5.0.15",
+    "mongoose-timestamp": "^0.6.0",
+    "multer": "^1.3.0",
+    "node-localstorage": "^1.3.1",
+    "nodemon": "^1.17.3"
+  }
+}

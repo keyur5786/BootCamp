@@ -1,0 +1,52 @@
+<flash-messages></flash-messages>
+<div class="container">
+<form (submit)="onAcademyRegister()">
+<!-- <form (submit) = "addUser()" -->
+  <div class="form-group" class="fmargin" align="center">
+    <div class="col-xs-3">
+    <label>Academy Name</label>
+    <input class="form-control" type="text" [(ngModel)]="AcademyName" name="AcademyName" style="margin-left: 65px;">
+  </div>
+
+<div class="col-xs-3">
+<label>AcademyWebsite</label>
+<input class="form-control" type="text"  [(ngModel)]="AcademyWebsite" name="AcademyWebsite" style="margin-left: 54px;">
+</div>
+
+<div class="col-xs-3">
+<label>AcademyFounded</label>
+<input class="form-control ptxt" type="text"  [(ngModel)]="AcademyFounded" name="AcademyFounded">
+</div>
+
+<div class="col-xs-3">
+<label>AcademyDiscription</label>
+<input class="form-control ptxt" type="text"  [(ngModel)]="AcademyDiscription" name="AcademyDiscription">
+</div>
+
+<div class="col-xs-3">
+<label>ZipCode</label>
+<input class="form-control ptxt" type="text"  [(ngModel)]="ZipCode" name="ZipCode">
+</div>
+
+<div class="col-xs-3">
+<label>AcademyProfileImage</label>
+<input class="form-control ptxt" type="text"  [(ngModel)]="AcademyProfileImage" name="AcademyProfileImage">
+</div>
+
+<div class="col-xs-3">
+<label>Headquarters</label>
+<input class="form-control ptxt" type="text"  [(ngModel)]="Headquarters" name="Headquarters">
+</div>
+
+<div class="col-xs-3">
+<label>AcademyLogo</label>
+<input class="form-control ptxt" type="text"  [(ngModel)]="AcademyLogo" name="AcademyLogo">
+</div>
+
+<br/>
+  <div class="text-center">
+  <button type="submit" name="submit" class="btn btn-primary" value="Register">Register</button>
+</div>
+</div>
+</form>
+</div>

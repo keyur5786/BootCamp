@@ -1,0 +1,16 @@
+.navbar-nav
+{
+    display: -ms-flexbox;
+    display: flex;
+   -ms-flex-direction: row;
+      flex-direction: row;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+li .curser{
+  color: white!important;
+}
+.glyphicon {
+    top: 4px;
+  }

@@ -1,0 +1,36 @@
+.table th{
+  padding:0px;
+  text-align: center;
+  color:white;
+  border-color: black;
+}
+
+td{
+    text-align: center;
+    padding: 0px;
+}
+/* body{
+  background-color: #ddd!important;
+} */
+.desc{
+  vertical-align: middle;
+  width: 176px;
+  margin-left: 10px;
+}
+.ind{
+  margin-left: 90px;
+}
+.an{margin-left: 41px;width: 176px;}
+.zip{margin-left: 71px;}
+.rev{margin-left: 61px;}
+.hd{margin-left:55px;width: 176px;}
+.web{margin-left: 11px;}
+.logo{margin-left: 50px;}
+.mail{margin-left: 72px;}
+.psw{margin-left: 55px;}
+.af{margin-left: 5px;}
+/* .fo{margin-left: :12px!important;} */
+.tbtn{
+  padding: 0px;
+
+}

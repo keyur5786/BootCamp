@@ -1,0 +1,42 @@
+<div class="col-md-12 text-center">
+  <h2 class="page-header" style="text-align:center;"> Courses List </h2>
+  <div class="float-left"><a href="singleAcademyCourse"> <button class="btn btn-primary"> Manage Courses </button> </a> </div> 
+<br/>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="btn-primary">
+        <th>Academy</th>
+        <th>ProgramType</th>
+        <th>ProgramDuration</th>
+        <th>ProgramName</th>
+        <th>ProgramDescription</th>
+        <th>ProgramSubject</th>
+        <th>ProgramLocation</th>
+        <th>Cost</th>
+        <th>StartDate</th>
+        <th>Length</th>
+        <th>Classsize</th>
+        <th>Commitment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let cource of Courses">
+        <td>{{cource.AcademyId?.AcademyName}}</td>
+        <td *ngIf="cource.ProgramType==1">Front End Web Application Development</td>
+        <td *ngIf="cource.ProgramType==2">Full Stack Application Development</td>
+        <td *ngIf="cource.ProgramType==3">User Experience Design</td>
+        <td>{{ cource.ProgramDuration }}</td>
+        <td>{{ cource.ProgramName }}</td>
+        <td>{{ cource.ProgramDescription }}</td>
+        <td>{{ cource.ProgramSubject }}</td>
+        <td>{{ cource.ProgramLocationId?.Loc_name }}</td>
+        <td>{{ cource.Cost }}</td>
+        <td>{{ cource.StartDate }}</td>
+        <td>{{ cource.Length }}</td>
+        <td>{{ cource.Classsize }}</td>
+        <td>{{ cource.Commitment }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

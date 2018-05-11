@@ -1,0 +1,115 @@
+
+<!-- menubar -->
+
+<flash-messages></flash-messages>
+<style>
+#img{
+  width: 100%;
+  height:400px;
+  background-image: url("../../assets/new-york-5e8de62b752677710ab7645fa354465f.jpg");
+}
+.btn-primary {
+
+    background-color: #d43d2e;
+
+}
+</style>
+<div id="img">
+  <br><br><br>
+  <div style="width:28%;background-color:white;margin-left:50%;">
+    <h1 style="color:#d43d2e; Font-family:Linux Libertine, Georgia, Times, serif;" align="center"> Inquiry </h1>
+    <form style="margin-top:4%;">
+      <table style=" Font-family:Linux Libertine, Georgia, Times, serif;">
+          <input class="form-control" type="text" [(ngModel)]="AcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+      <tr>
+        <td ><input  type="text"  [(ngModel)]="Name" name="Name"  style="margin-left:6%!important;"   placeholder="Name"></td>
+        <td ><input  type="text"   [(ngModel)]="EmailId" name="EmailId" style="margin-left:8%!important;" placeholder="EmailId" ></td>
+      </tr>
+      <tr>
+        <td ><input  type="text"  [(ngModel)]="Phone" name="Phone"  style="margin-left:6%!important;margin-top:2%;"   placeholder="Phone No"></td>
+        <td ><input  type="Notes"  [(ngModel)]="Notes" name="Notes" style="margin-left:8%!important;margin-top:2%;" placeholder="Notes"></td>
+</tr>
+           <tr>
+
+          <td><button type="submit" name="submit"  style="background-color: #d43d2e;color:white; margin-left:6%;margin-top:3%;">Submit</button></td>
+         </tr>
+<br>
+      </table>
+
+
+    </form>
+</div>
+  </div>
+<div>
+  <h2 style="text-align:center;">Academy Profile</h2>
+</div><br><br>
+
+<div>
+<div style="float:left; width:50%;">
+   <h1 style="padding-left:5%;color:#d43d2e;">Academy Detail</h1><br>
+   <pre style="padding-left:5%;font-size:100%;Font:normal;Font-family:Verdana, Geneva, sans-serif;background-color:#ffffff!important;border:none!important">
+   AcademyName:              {{ academy?.AcademyName }}<br>
+   AcademyWebsite:           {{ academy?.AcademyWebsite }}<br>
+   AcademyLogo:             {{ academy?.AcademyLogo }}<br>
+   AcademyFounded:           {{ academy?.AcademyFounded }}<br>
+   Headquarters:                 {{ academy?.Headquarters }}<br>
+   AcademyDiscription:        {{ academy?.AcademyDiscription }}<br>
+   ZipCode:                        {{ academy?.ZipCode }}<br>
+   EmailId:                         {{ academy?.EmailId }}<br>
+</pre>
+  </div>
+
+  <div style="float:right; width:50%;">
+   <h1 style="padding-left:7%;color:#d43d2e;">Course Detail</h1><br>
+   <pre style="padding-left:5%;font-size:100%;Font:normal;Font-family:Verdana, Geneva, sans-serif;background-color:#ffffff!important;border:none!important;">
+    Academy:                    {{cource?.AcademyId.AcademyName}}<br>
+    ProgramType:               {{ cource?.ProgramType }}<br>
+    ProgramDuration:          {{ cource?.ProgramDuration }}<br>
+    ProgramName:              {{ cource?.ProgramName }}<br>
+    ProgramDescription:      {{ cource?.ProgramDescription }}<br>
+    ProgramSubject:           {{ cource?.ProgramSubject }}<br>
+    ProgramLocation:          {{ cource?.ProgramLocationId?.Loc_name }}<br>
+    Cost:                            {{ cource?.Cost }}<br>
+    StartDate:                     {{ cource?.StartDate }}<br>
+    Length:                          {{ cource?.Length }}<br>
+    Classsize:                       {{ cource?.Classsize }}<br>
+    Commitment:                  {{ cource?.Commitment }}<br>
+  <button type="button" name="submit" class="btn btn-primary" (click)="inquiry()" value="Inquiry" class="button button3">Inquiry</button>
+  <button type="button" class="btn btn-primary" (click)="inquiryPopUp()" value="Inquiry" class="button button3">Inquiry POPUP</button>
+</pre>
+
+<div id="popUP" *ngIf="POPUP" style="margin-left:30%;margin-top:50%;width:500px;height:500px;">
+  <button type="button" class="btn btn-default" (click)="inquiryPopUp()" id="close"><i class="fa fa-close" style="font-size:36px;color:black!important;"></i></button>
+  <h1> Inquiry </h1><br>
+  <form>
+    <table>
+        <input class="form-control" type="text" [(ngModel)]="AcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+      <tr>
+        <td>Phone No</td>
+        <td ><input class="form-control ptxt" type="text"  [(ngModel)]="Phone" name="Phone" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td>EmailId</td>
+        <td ><input class="form-control ptxt" type="text"   [(ngModel)]="EmailId" name="EmailId" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td>Name</td>
+        <td ><input class="form-control ptxt" type="text"  [(ngModel)]="Name" name="Name" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td>Notes</td>
+        <td ><input class="form-control ptxt" type="Notes"  [(ngModel)]="Notes" name="Notes" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td></td>
+<td><button type="submit" name="submit" class="btn btn-primary">Submit</button></td>
+</tr>
+    </table>
+
+
+  </form>
+
+
+
+  </div>
+</div>

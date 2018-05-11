@@ -1,0 +1,337 @@
+<app-navbar></app-navbar>
+<style>.table th{
+  padding:0px;
+  text-align: center;
+  color:white;
+  border-color: black;
+}
+
+td{
+    text-align: center;
+    padding: 0px;
+}
+body{
+  background-color: #ddd!important;
+}
+.un{
+margin-left: 7px;
+}
+
+.tbtn{
+  padding: 0px;
+
+}
+.tleft{
+margin-left: -142px!important;
+}
+ .desc{
+   width: 172px;
+vertical-align: middle;
+  margin-left: 6px;
+}.pn{margin-left: 19px;}
+.pt{width: 175px;margin-left: 24px;height: 25px;}
+.len{margin-left: 69px;}
+.cst{margin-left: 108px;}
+.csize{margin-left: 76px;}
+.ps{margin-left: 15px;}
+.pd{margin-left: 8px;}
+.st{margin-left: 61px;
+    width: 175px;}
+    .cm{margin-left: 39px;}
+    .dd1{width: 173px;height: 25px;}
+    .dd{width: 173px;margin-left: 77px;height: 25px;}
+</style>
+<div class="container">
+  <div style="position:fixed; top:100px; right:20px;"> <flash-messages></flash-messages> </div>
+  <form (submit) = "addCource()" *ngIf="!toggleForm" >
+    <h2 class="page-header" style="text-align:center;padding-top: 35px;">Course</h2>
+    <br/>
+ <div class="row">
+        <div class="col-sm-4">
+          <label>ProgramType</label>
+          <select [(ngModel)]="ProgramType" name="ProgramType" class="pt">
+            <option value="">--Select ProgramType--</option>
+            <option *ngFor="let type of ProgramTypeArray" [value]="type.id">{{type.name}}</option>
+          </select>
+        </div>
+
+        <div class="col-sm-4">
+          <label>Academy</label>
+          <select [(ngModel)]="AcademyId" name="AcademyId" class="dd">
+            <option value="">--Select Academy--</option>
+            <option *ngFor="let academy of Academy" [value]="academy._id">{{academy.AcademyName}}</option>
+          </select>
+        </div>
+
+        <div class="col-sm-4">
+          <label>ProgramDuration</label>
+          <input type="number" [(ngModel)]="ProgramDuration" name="ProgramDuration" class="pd" >
+        </div>
+</div>
+<div class="row">
+
+         <div class="col-sm-4">
+           <label>ProgramName</label>
+           <input type="text" [(ngModel)]="ProgramName" name="ProgramName" class="pn" maxlength="50">
+         </div>
+
+         <div class="col-sm-4">
+         <label>ProgramDescription</label>
+         <textarea name="ProgramDescription" rows="1" [(ngModel)]="ProgramDescription" class="desc" maxlength="500"></textarea>
+         <!-- <input type="text" [(ngModel)]="ProgramDescription" name="ProgramDescription" clss="form-controller"> -->
+       </div>
+
+       <div class="col-sm-4">
+         <label>ProgramSubject</label>
+         <input type="text" [(ngModel)]="ProgramSubject" name="ProgramSubject" class="ps" maxlength="50">
+       </div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <label>ProgramLocation</label>
+    <select [(ngModel)]="ProgramLocationId" name="ProgramLocationId" class="dd1">
+      <option value="">--Select--</option>
+      <option *ngFor="let location of ProgramLocation" style="width: 170px!important;" [value]="location._id">{{location.Loc_name}}</option>
+    </select>
+  </div>
+
+       <div class="col-sm-4">
+         <label>Cost</label>
+         <input type="number" [(ngModel)]="Cost" name="Cost" class="cst">
+       </div>
+
+       <div class="col-sm-4">
+         <label>StartDate</label>
+         <input type="date" [(ngModel)]="StartDate" name="StartDate" class="st" >
+       </div>
+
+       <div class="col-sm-4">
+         <label>EndDate</label>
+         <input type="date" [(ngModel)]="EndDate" name="EndDate" class="st" >
+       </div>
+</div>
+  <div class="row">
+    <div class="col-sm-4">
+      <label>Length</label>
+      <input type="number" [(ngModel)]="Length" name="Length" class="len" >
+    </div>
+
+    <div class="col-sm-4">
+      <label>Classsize</label>
+      <input type="text" [(ngModel)]="Classsize" name="Classsize" class="csize" >
+    </div>
+    <div class="col-sm-4">
+      <label>Commitment</label>
+      <input type="text" [(ngModel)]="Commitment" name="Commitment" class="cm" >
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <label>Career Services</label>
+      <select [(ngModel)]="CareerServices" name="CareerServices">
+        <option value="">--Select Career Services--</option>
+        <option value=true>Yes</option>
+        <option value=false>No</option>
+      </select>
+    </div>
+
+    <div class="col-sm-4">
+      <label>Financing</label>
+      <select [(ngModel)]="Financing" name="Financing">
+        <option value="">--Select Financing--</option>
+        <option value=true>Yes</option>
+        <option value=false>No</option>
+      </select>
+    </div>
+    <div class="col-sm-4">
+      <label>Scholarship</label>
+      <select [(ngModel)]="Scholarship" name="Scholarship">
+        <option value="">--Select Scholarship--</option>
+        <option value=true>Yes</option>
+        <option value=false>No</option>
+      </select>
+    </div>
+  </div>
+<br/>
+<div class="text-center">
+    <button type="submit" name="submit" class="btn btn-primary">Save </button>
+</div>
+  </form>
+
+  <form #editfrm="ngForm" (ngSubmit)="editCorce(editfrm)" *ngIf="toggleForm" align="center">
+  <h2 class="page-header" style="text-align:center;padding-top: 35px;"> Edit course</h2>
+  <br/>
+  <div class="row">
+         <div class="col-sm-4">
+           <label>ProgramType</label>
+           <select [ngModel]="ProgramType" name="ProgramType" class="pt">
+             <option value="">--Select--</option>
+             <option *ngFor="let type of ProgramTypeArray" [value]="type.id">{{type.name}}</option>
+           </select>
+         </div>
+
+         <div class="col-sm-4">
+           <label>Academy</label>
+           <select [ngModel]="AcademyId" name="AcademyId" class="dd">
+             <option value="">--Select--</option>
+             <option *ngFor="let academy of Academy" [value]="academy._id">{{academy.AcademyName}}</option>
+           </select>
+         </div>
+
+         <div class="col-sm-4">
+           <label>ProgramDuration</label>
+           <input type="number" [ngModel]="cource.ProgramDuration" name="ProgramDuration" class="pd" >
+         </div>
+
+
+ </div>
+ <div class="row">
+   <div class="col-sm-4">
+     <label>ProgramName</label>
+     <input type="text" [ngModel]="cource.ProgramName" name="ProgramName" class="pn" maxlength="50">
+   </div>
+        <div class="col-sm-4">
+          <label>ProgramDescription</label>
+          <textarea name="ProgramDescription" rows="1" [ngModel]="cource.ProgramDescription" class="desc" maxlength="500"></textarea>
+        </div>
+
+        <div class="col-sm-4">
+          <label>ProgramSubject</label>
+          <input type="text" [ngModel]="cource.ProgramSubject" name="ProgramSubject" class="ps" maxlength="50">
+        </div>
+
+
+ </div>
+<div class="row">
+  <div class="col-sm-4">
+    <label>ProgramLocation</label>
+    <select [ngModel]="ProgramLocationId" name="ProgramLocationId" class="dd1">
+      <option value="">--Select--</option>
+      <option *ngFor="let location of ProgramLocation" [value]="location._id">{{location.Loc_name}}</option>
+    </select>
+  </div>
+    <div class="col-sm-4">
+      <label>Cost</label>
+      <input type="number" [ngModel]="cource.Cost" name="Cost" class="cst" >
+    </div>
+    <div class="col-sm-4">
+      <label>StartDate</label>
+      <input type="date" [ngModel]="cource.StartDate" name="StartDate" class="st" >
+    </div>
+    <div class="col-sm-4">
+      <label>EndDate</label>
+      <input type="date" [ngModel]="cource.EndDate" name="EndDate" class="st" >
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <label>Length</label>
+      <input type="number" [ngModel]="cource.Length" name="Length" class="len">
+    </div>
+    <div class="col-sm-4">
+      <label>Classsize</label>
+      <input type="number" [ngModel]="cource.Classsize" name="Classsize" class="csize" >
+    </div>
+    <div class="col-sm-4">
+      <label>Commitment</label>
+      <input type="text" [ngModel]="cource.Commitment" name="Commitment" class="cm">
+    </div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <label>CareerServices</label>
+    <select [ngModel]="cource.CareerServices" name="CareerServices">
+      <option value="">--Select Career Services--</option>
+      <option value=true>Yes</option>
+      <option value=false>No</option>
+    </select>
+  </div>
+  <div class="col-sm-4">
+    <label>Financing</label>
+    <select [ngModel]="cource.Financing" name="Financing">
+      <option value="">--Select Financing--</option>
+      <option value=true>Yes</option>
+      <option value=false>No</option>
+    </select>
+  </div>
+  <div class="col-sm-4">
+    <label>Scholarship</label>
+    <select [ngModel]="cource.Scholarship" name="Scholarship">
+      <option value="">--Select Scholarship--</option>
+      <option value=true>Yes</option>
+      <option value=false>No</option>
+    </select>
+  </div>
+</div>
+  <br/>
+    <div class="text-center">
+    <button type="submit" name="submit" class="btn btn-primary" value="Edit">Save</button>
+</div>
+  </form>
+  <br/>
+</div>
+
+<div class="col-md-12 text-center">
+  <h2 class="page-header" style="text-align:center;"> Courses List </h2>
+<br/>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="btn-primary">
+        <th>Academy</th>
+        <th>ProgramType</th>
+        <th>ProgramDuration</th>
+        <th>ProgramName</th>
+        <th>ProgramDescription</th>
+        <th>ProgramSubject</th>
+        <th>ProgramLocation</th>
+        <th>Cost</th>
+        <!-- <th>StartDate</th>
+        <th>EndDate</th>
+        <th>Length</th>
+        <th>Classsize</th>
+        <th>Commitment</th>
+        <th>CareerServices</th>
+        <th>Financing</th>
+        <th>Scholarship</th> -->
+        <th>Action</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let cource of cources">
+        <td>{{cource.AcademyId?.AcademyName}}</td>
+        <td *ngIf="cource.ProgramType==1">Front End Web Application Development</td>
+        <td *ngIf="cource.ProgramType==2">Full Stack Application Development</td>
+        <td *ngIf="cource.ProgramType==3">User Experience Design</td>
+        <td>{{ cource.ProgramDuration }}</td>
+        <td>{{ cource.ProgramName }}</td>
+        <td>{{ cource.ProgramDescription }}</td>
+        <td>{{ cource.ProgramSubject }}</td>
+        <td>{{ cource.ProgramLocationId?.Loc_name }}</td>
+        <td>{{ cource.Cost }}</td>
+        <!-- <td>{{ cource.StartDate }}</td>
+        <td>{{ cource.EndDate }}</td>
+        <td>{{ cource.Length }}</td>
+        <td>{{ cource.Classsize }}</td>
+        <td>{{ cource.Commitment }}</td>
+        <td>{{ cource.CareerServices}}</td>
+        <td>{{ cource.Financing }}</td>
+        <td>{{ cource.Scholarship }}</td> -->
+        <td>
+            <button type="button" name="button" (click)="deletecource(cource._id,cource.ProgramSubject)" value="Delete" class="btn btn-danger tbtn">Delete</button>
+            <button type="button" name="button" class="btn btn-primary tbtn" (click)="showEditForm(cource)"> Edit </button>
+        </td>
+        <td>
+          <select [(ngModel)]="cource.StatusId" (change)="changeStatus(cource._id,cource.StatusId,cource.ProgramSubject,cource.AcademyId._id)">
+            <option value="1"> Draft </option>
+            <option value="2"> Publish </option>
+            <option value="3"> Live </option>
+            <option value="4"> Deactivate </option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
