@@ -19,6 +19,7 @@ Password:string;
   ) { }
 
   ngOnInit() {
+    localStorage.clear();
   }
 
   onLogin(){
@@ -26,13 +27,16 @@ Password:string;
       UserName : this.UserName,
       Password : this.Password
     }
-    console.log(user);
+    console.log("USER = "+JSON.stringify(user));
     this.LoginServiceService.authenticateUser(user).subscribe(data=>{
+    console.log("Logger = "+JSON.stringify(data[0]));
       if(data[0].UserName){
+        sessionStorage.setItem('isLogin',"True");
         localStorage.setItem('LoggerId', data[0]._id);
+        localStorage.removeItem('AcademyID');
         localStorage.setItem('LoggerName', data[0].UserName);
         this.flashMessage.show("You are login",{cssClass : 'alert-success',timeout:5000});
-        this.router.navigate(['user']);
+        this.router.navigate(['adminHome']);
       }else{
         this.flashMessage.show(data,{cssClass : 'alert-danger',timeout:5000});
       }

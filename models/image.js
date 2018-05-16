@@ -15,7 +15,7 @@ const ImageSchema = mongoose.Schema({
 
   CreatedOn : {
     type: String,
-default: moment().format('DD/MM/YYYY HH:MM:SS')
+    default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
   CreatedIp : {
@@ -40,7 +40,7 @@ default: moment().format('DD/MM/YYYY HH:MM:SS')
 
   Active : {
     type: Boolean,
-
+    default: true
   }
 });
 

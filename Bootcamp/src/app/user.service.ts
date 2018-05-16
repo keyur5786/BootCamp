@@ -16,15 +16,20 @@ export class UserService {
     .map(res=>res.json());
   }
 
-  addUser(newUser){
+  getUsersRights(){
+    return this.http.get('http://localhost:3000/api/GetRightsList')
+    .map(res=>res.json());
+  }
+
+  addUser(list){
   let headers = new Headers();
   headers.append('Content-Type','application/json');
-  return this.http.post('http://localhost:3000/api/Users',newUser,{headers:headers})
+  return this.http.post('http://localhost:3000/api/Users',list,{headers:headers})
   .map(res=>res.json());
 }
 
-deleteuser(id){
-  return this.http.delete('http://localhost:3000/api/Users/'+id)
+deleteuser(id,UserId,UserName){
+  return this.http.delete('http://localhost:3000/api/Users/'+id+"/"+UserId+"/"+UserName)
   .map(res=>res.json());
 }
 updateUser(newUser){
@@ -32,6 +37,32 @@ updateUser(newUser){
    headers.append('Content-Type','application/json');
    return this.http.put('http://localhost:3000/api/Users/'+newUser._id,newUser,{headers:headers})
    .map(res => res.json());
+ }
+
+ getUserDetail(UserId){
+   return this.http.get('http://localhost:3000/api/getUserDetail/'+UserId)
+   .map(res=>res.json());
+ }
+
+ updateRights(rightsArray){
+   let headers = new Headers();
+   headers.append('Content-Type','application/json');
+   return this.http.put('http://localhost:3000/api/updateRights',rightsArray,{headers:headers})
+   .map(res => res.json());
+ }
+
+ activateUser(userObject){
+   let headers = new Headers();
+   headers.append('Content-Type','application/json');
+   return this.http.put('http://localhost:3000/api/activateUser',userObject,{headers:headers})
+   .map(res=>res.json());
+ }
+
+ deactivateUser(userObject){
+   let headers = new Headers();
+   headers.append('Content-Type','application/json');
+   return this.http.put('http://localhost:3000/api/deactivateUser',userObject,{headers:headers})
+   .map(res=>res.json());
  }
 
 }

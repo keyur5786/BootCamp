@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 var mongoose = require('mongoose');
 const multer = require("multer");
+const moment = require("moment");
 const getIP = require('ipware')().get_ip;
 var fs = require('fs');
 var LocalStorage = require('node-localstorage').LocalStorage;
@@ -49,34 +50,158 @@ const upload = multer({storage:storage});
 // Store contact.js schema into variable
 const User = require("../models/user");
 const Academy = require("../models/academy");
+const UserRights = require("../models/UserRights");
 const Cource=require("../models/cource");
 const imageUpload = require("../models/image");
 const Location=require("../models/Location");
 const Status=require("../models/program-status");
 const Registers=require("../models/register");
 const Inquiry=require("../models/inquiry");
+const ActivityLog = require("../models/activityLog");
 // For User
 // Retrive Data
 router.get('/users',(req,res,next)=>{
-  User.find(function(err,User){
+
+  User.find()
+  .sort({CreatedOn:-1})
+  .then(User=>{
     res.json(User);
+  })
+  .catch(err=>{
+    res.json(err);
   });
 });
+
+router.get("/getUserDetail/:userId",(req,res,next)=>{
+  var UserArray = [];
+  User.find({_id:req.params.userId})
+  .then(User=>{
+    UserArray.push(User);
+    UserRights.find({UserId:req.params.userId})
+    .then(Rights=>{
+      UserArray.push(Rights);
+      res.json(UserArray);
+    })
+    .catch(err=>{
+      res.json(err);
+    });
+  })
+  .catch(err=>{
+    res.json(err);
+  });
+});
+
+router.get('/GetRightsList',(req,res,next)=>{
+  var rights=[];
+  rights.push(
+    {FormName:'User',Add:false,Edit:false,Delete:false,View:false},
+    {FormName:'Course',Add:false,Edit:false,Delete:false,View:false},
+    {FormName:'Academy',Add:false,Edit:false,Delete:false,View:false},
+    {FormName:'Location',Add:false,Edit:false,Delete:false,View:false},
+    {FormName:'ActivityLog',Add:false,Edit:false,Delete:false,View:false},
+    {FormName:'Inquiries',Add:false,Edit:false,Delete:false,View:false}
+  );
+  res.json(rights);
+});
+
+router.get('/GetRightsListByUserId/:userId',(req,res,next)=>{
+  ///console.log("route : "+req.params.userId);
+  UserRights.find({UserId:req.params.userId})
+  .then(data1=>{
+      res.json(data1);
+  })
+  .catch(err=>{
+    console.log("Error in getting rights = "+err);
+    res.json("Error in getting rights = "+err);
+  });
+});
+
+router.put('/updateRights',(req, res, next)=>{
+  console.log(req.body);
+  for(var i=0;i<req.body.length;i++){
+    UserRights.findOneAndUpdate({_id:req.body[i].id},{
+    	$set:{
+        Add: req.body[i].add,
+        Edit: req.body[i].edit,
+        Delete: req.body[i].delete,
+        View: req.body[i].view,
+        UpdatedOn:req.body[i].UpdatedOn,
+        UpdatedBy: req.body[i].UpdatedBy,
+        UpdatedIp: getIP(req).clientIp
+    	}},
+      {runValidators:true},
+      function(err,result){
+        if(err){
+          if(err.code===11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+          }else{
+            res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+          }
+        }else{
+          //res.status(200).json({"success":"User Rights Updated Successfully !"});
+        }
+      });
+  }
+  res.status(200).json({"success":"User & Rights Updated Successfully !"});
+});
+
 
 // Insert Data
 router.post('/Users',(req,res,next)=>{
   let newUser = new User({
-    FirstName: req.body.FirstName,
-    LastName: req.body.LastName,
-    UserName: req.body.UserName,
-    Password: req.body.Password,
-    CreatedBy: req.body.CreatedBy,
+    FirstName: req.body[0].newUser.FirstName,
+    LastName: req.body[0].newUser.LastName,
+    UserName: req.body[0].newUser.UserName,
+    Password: req.body[0].newUser.Password,
+    CreatedBy: req.body[0].newUser.CreatedBy,
+    CreatedOn: req.body[0].newUser.CreatedOn,
     CreatedIp : getIP(req).clientIp
     //console.log(getIP(req)) =  { clientIp: '127.0.0.1', clientIpRoutable: false }
   });
   newUser.save()
 .then(result  =>{
-  res.status(200).json({"success":"User Saved Successfully !"});
+  let newActivityLog = new ActivityLog({
+    UserId : req.body[0].newUser.CreatedBy,
+    UserName : req.body[0].newUser.UserName,
+    UserType : "Admin",
+    Page : "User",
+    Action : "Add",
+    ImpectId : result._id,
+    CreatedOn: req.body[0].newUser.CreatedOn,
+    CreatedIp : getIP(req).clientIp
+  });
+  newActivityLog.save()
+  .then(activity=>{
+    for (var i = 0; i < req.body[1].rightsList.length; i++) {
+
+      let rights = new UserRights({
+        UserId:result._id,
+        FormName: req.body[1].rightsList[i].FormName,
+        Add: req.body[1].rightsList[i].Add,
+        Edit: req.body[1].rightsList[i].Edit,
+        Delete: req.body[1].rightsList[i].Delete,
+        View: req.body[1].rightsList[i].View,
+        CreatedBy: req.body[0].newUser.CreatedBy,
+        CreatedOn: req.body[0].newUser.CreatedOn,
+        CreatedIp : getIP(req).clientIp
+      });
+      rights.save()
+      .then(result  =>{
+        console.log("User Rights Saved !");
+      });
+    }
+    res.status(200).json({"success":"User Saved Successfully !"});
+  })
+  .catch(err=>{
+    if(err.code === 11000){
+        var duplicateValue = err.message.match(/".*"/);
+        res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+    }
+    else{
+      res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+    }
+  });
 })
 .catch(err => {
   if(err.code === 11000){
@@ -89,20 +214,42 @@ router.post('/Users',(req,res,next)=>{
 });
 });
 
+
 // Deleting Data
-router.delete('/Users/:id',(req, res, next)=>{
+router.delete('/Users/:id/:UserId/:UserName',(req, res, next)=>{
 	User.remove({_id:req.params.id},function(err, result){
 		if(err){
 			res.json(err);
 		}else{
-			res.json({msg: "User Deleted Successfully"});
+      let newActivityLog = new ActivityLog({
+        UserId : req.params.UserId,
+        UserName : req.params.UserName,
+        UserType : "Admin",
+        Page : "User",
+        Action : "Delete",
+        ImpectId : req.params.id,
+        CreatedIp : getIP(req).clientIp,
+        CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+      });
+      newActivityLog.save()
+      .then(activity=>{
+        res.status(200).json({"success":"User Deleted Successfully !"});
+      })
+      .catch(err=>{
+        if(err.code === 11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+        }
+        else{
+          res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+        }
+      });
 		}
 	});
 });
 
 // Updating Data
 router.put('/Users/:id',(req, res, next)=>{
-  console.log(req.params.id);
 	User.findOneAndUpdate({_id:req.params.id},{
 		$set:{
       FirstName: req.body.FirstName,
@@ -123,7 +270,29 @@ router.put('/Users/:id',(req, res, next)=>{
           res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
         }
       }else{
-        res.status(200).json({"success":"User Updated Successfully !"});
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.ByUser,
+          UserType : "Admin",
+          Page : "User",
+          Action : "Update",
+          ImpectId : result._id,
+          CreatedOn : req.body.UpdatedOn,
+          CreatedIp : getIP(req).clientIp
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"User Updated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
       }
     });
 });
@@ -131,8 +300,13 @@ router.put('/Users/:id',(req, res, next)=>{
 //For Academy
 // Get Academy Details
 router.get('/academies',(req,res,next)=>{
-  Academy.find(function(err,Academy){
+  Academy.find()
+  .sort({CreatedOn:-1})
+  .then(Academy=>{
     res.json(Academy);
+  })
+  .catch(err=>{
+    res.json(err);
   });
 });
 
@@ -146,10 +320,23 @@ router.get('/academy/:id',(req,res,next)=>{
     res.json(err);
   });
 });
+router.post('/imageuploadU', upload.single('file'), (req, res, next) => {
+  console.log(req.file);
+   res.status(200).json({"success":"File Upload Successfully !"});
+});
+
+router.post('/imageuploadR', upload.single('file'), (req, res, next) => {
+  //console.log(req.file);
+   res.status(200).json({"success":"File Upload Successfully !"});
+});
 
 // Insert Academy Details
 router.post('/imageupload', upload.single('file'), (req, res, next) => {
-  res.status(200).json({"success":"File Upload Successfully !"});
+   res.status(200).json({"success":"File Upload Successfully !"});
+});
+
+router.post('/imageuploadE', upload.single('fileE'), (req, res, next) => {
+   res.status(200).json({"success":"File Upload Successfully !"});
 });
 
 router.post('/academy',(req,res,next)=>{
@@ -166,12 +353,34 @@ console.log("at insert: "+localStorage.getItem('logo'));
     EmailId:req.body.EmailId,
     Password:req.body.Password,
     CreatedBy:req.body.CreatedBy,
-    CreatedIp:getIP(req).clientIp
+    CreatedIp:getIP(req).clientIp,
+    CreatedOn:req.body.CreatedOn
   });
   newAcademy.save()
   .then(result =>{
-    res.status(200).json({"success":"Academy Saved Successfully !"});
-    localStorage.removeItem("logo");
+    let newActivityLog = new ActivityLog({
+      UserId : req.body.CreatedBy,
+      UserName : req.body.UserName,
+      UserType : req.body.UserType,
+      Page : "Academy",
+      Action : "Add",
+      ImpectId : result._id,
+      CreatedOn:req.body.CreatedOn,
+      CreatedIp : getIP(req).clientIp
+    });
+    newActivityLog.save()
+    .then(activity=>{
+      res.status(200).json({"success":"Academy Saved Successfully !"});
+    })
+    .catch(err=>{
+      if(err.code === 11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+      }
+      else{
+        res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+      }
+    });
   })
   .catch(err => {
     if(err.code === 11000){
@@ -185,23 +394,62 @@ console.log("at insert: "+localStorage.getItem('logo'));
 });
 
 // Delete Academy Details
-router.delete('/academy/:id',(req, res, next)=>{
-  console.log("Route = "+req.params.id);
-	Academy.remove({_id:req.params.id},function(err, result){
-		if(err){
-			res.json(err);
-		}else{
-			res.json({msg: "Academy Deleted Successfully"});
-		}
-	});
+router.delete('/academy/:id/:UserId/:UserName',(req, res, next)=>{
+  Cource.find({AcademyId:req.params.id})
+  .then(data=>{
+    if(data.length!=0){
+      res.status(200).json({"defaultError":"Some Record Depend On This One So You Can't Delete It !"});
+    }
+    else{
+      Inquiry.find({AcademyId:req.params.id})
+      .then(data1=>{
+        if(data1.length!=0){
+          res.status(200).json({"defaultError":"Some Record Depend On This One So You Can't Delete It !"});
+        }
+        else{
+          Academy.remove({_id:req.params.id},function(err, result){
+        		if(err){
+        			res.json(err);
+        		}else{
+              let newActivityLog = new ActivityLog({
+                UserId : req.params.UserId,
+                UserName : req.params.UserName,
+                UserType : "Admin",
+                Page : "Academy",
+                Action : "Delete",
+                ImpectId : req.params.id,
+                CreatedIp : getIP(req).clientIp,
+                CreatedOn :moment().format("DD-MM-YYYY HH:mm:ss")
+              });
+              newActivityLog.save()
+              .then(activity=>{
+                res.json({msg: "Academy Deleted Successfully !"});
+              })
+              .catch(err=>{
+                if(err.code === 11000){
+                    var duplicateValue = err.message.match(/".*"/);
+                    res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+                }
+                else{
+                  res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+                }
+              });
+        		}
+        	});
+        }
+      });
+    }
+  });
 });
+
 //update academy
 router.put('/academy/:id',(req, res, next)=>{
+  console.log("at insert: "+localStorage.getItem('logo'));
 	Academy.findOneAndUpdate({_id:req.params.id},{
 		$set:{
       AcademyName:  req.body.AcademyName,
       AcademyWebsite: req.body.AcademyWebsite,
-      AcademyLogo: req.body.AcademyLogo,
+      AcademyLogo: localStorage.getItem('logo'),
       AcademyProfileImage:req.body.AcademyProfileImage,
       AcademyFounded: req.body.AcademyFounded,
       Headquarters: req.body.Headquarters,
@@ -218,12 +466,37 @@ router.put('/academy/:id',(req, res, next)=>{
     if(err){
       if(err.code===11000){
         var duplicateValue = err.message.match(/".*"/);
+        localStorage.removeItem("logo");
         res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
       }else{
+        localStorage.removeItem("logo");
         res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
       }
     }else{
-      res.status(200).json({"success":"User Updated Successfully !"});
+      localStorage.removeItem("logo");
+      let newActivityLog = new ActivityLog({
+        UserId : req.body.UpdatedBy,
+        UserType : req.body.UserType,
+        UserName : req.body.UserName,
+        Page : "Academy",
+        Action : "Update",
+        ImpectId : result._id,
+        CreatedIp : getIP(req).clientIp,
+        CreatedOn : req.body.UpdatedOn
+      });
+      newActivityLog.save()
+      .then(activity=>{
+        res.status(200).json({"success":"Academy Updated Successfully !"});
+      })
+      .catch(err=>{
+        if(err.code === 11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+        }
+        else{
+          res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+        }
+      });
     }
   });
 });
@@ -232,6 +505,30 @@ router.get('/cources',(req,res,next)=>{
   var data=[];
   // Get Data From 1st Table: Course
   Cource.find()
+  .sort({CreatedOn:-1})
+  .populate('AcademyId')
+  .populate('ProgramLocationId')
+  .then(cource=>{
+    data.push(cource);
+    // Get Data From Second Table: Academy
+    Academy.find({Active:true})
+    .then(academy=>{
+      data.push(academy);
+      // Get Data From 3rd Table location
+      Location.find({Active:true})
+      .then(location=>{
+        data.push(location);
+        res.json(data);
+      });
+    });
+  });
+});
+
+router.get('/MyCources/:academyId',(req,res,next)=>{
+  var data=[];
+  // Get Data From 1st Table: Course
+  Cource.find({AcademyId:req.params.academyId})
+  .sort({CreatedOn:-1})
   .populate('AcademyId')
   .populate('ProgramLocationId')
   .then(cource=>{
@@ -249,6 +546,8 @@ router.get('/cources',(req,res,next)=>{
     });
   });
 });
+
+
 
 //for getting searched records search-cource
 router.get('/cources/:programId',(req,res,next)=>{
@@ -284,6 +583,7 @@ router.post('/Cources',(req,res,next)=>{
     ProgramDescription:req.body.ProgramDescription,
     ProgramSubject:req.body.ProgramSubject,
     ProgramLocationId:req.body.ProgramLocationId,
+    LocationName: req.body.LocationName,
     Cost:req.body.Cost,
     StartDate:req.body.StartDate,
     EndDate:req.body.EndDate,
@@ -293,8 +593,10 @@ router.post('/Cources',(req,res,next)=>{
     CareerServices:req.body.CareerServices,
     Financing:req.body.Financing,
     Scholarship:req.body.Scholarship,
+    ByAcademy:req.body.ByAcademy,
     CreatedBy:req.body.CreatedBy,
-    CreatedIp : getIP(req).clientIp
+    CreatedIp : getIP(req).clientIp,
+    CreatedOn : req.body.CreatedOn
   });
   newCource.save()
   .then(result=>{
@@ -303,11 +605,33 @@ router.post('/Cources',(req,res,next)=>{
       StatusId : 1,
       AcademyMstId : result.AcademyId,
       CreatedBy:req.body.CreatedBy,
-      CreatedIp : getIP(req).clientIp
+      CreatedIp : getIP(req).clientIp,
+      CreatedOn : req.body.CreatedOn
     });
     newStatus.save()
     .then(status=>{
-       res.status(200).json({success:'Course Saved Successfully !'});
+      let newActivityLog = new ActivityLog({
+        UserId : req.body.CreatedBy,
+        UserName : req.body.UserName,
+        UserType : req.body.UserType,
+        Page : "Course",
+        Action : "Add",
+        ImpectId : result._id,
+        CreatedIp : getIP(req).clientIp
+      });
+      newActivityLog.save()
+      .then(activity=>{
+        res.status(200).json({success:'Course Saved Successfully !'});
+      })
+      .catch(err=>{
+        if(err.code === 11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+        }
+        else{
+          res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+        }
+      });
       })
       .catch(err =>{
         res.json(err);
@@ -326,14 +650,44 @@ router.post('/Cources',(req,res,next)=>{
 });
 
 // Deleting Data
-router.delete('/Cources/:id',(req, res, next)=>{
-	Cource.remove({_id:req.params.id},function(err, result){
-		if(err){
-			res.json(err);
-		}else{
-			res.json({msg: "Cource Deleted Successfully"});
-		}
-	});
+router.delete('/Cources/:id/:UserId/:UserName/:UserType',(req, res, next)=>{
+  Inquiry.find({CourseId:req.params.id})
+  .then(data=>{
+    if(data.length!=0){
+      res.status(200).json({"defaultError":"Some Record Depended On This One So You Can't Delete It !"});
+    }
+    else{
+      Cource.remove({_id:req.params.id},function(err, result){
+    		if(err){
+    			res.json(err);
+    		}else{
+          let newActivityLog = new ActivityLog({
+            UserId : req.params.UserId,
+            UserName : req.params.UserName,
+            UserType : req.params.UserType,
+            Page : "Course",
+            Action : "Delete",
+            ImpectId : req.params.id,
+            CreatedIp : getIP(req).clientIp,
+            CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+          });
+          newActivityLog.save()
+          .then(activity=>{
+            res.json({msg: "Cource Deleted Successfully"});
+          })
+          .catch(err=>{
+            if(err.code === 11000){
+                var duplicateValue = err.message.match(/".*"/);
+                res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+            }
+            else{
+              res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+            }
+          });
+    		}
+    	});
+    }
+  });
 });
 
 // Updating Data
@@ -348,6 +702,7 @@ router.put('/Cources/:id',(req, res, next)=>{
       ProgramDescription:req.body.ProgramDescription,
       ProgramSubject:req.body.ProgramSubject,
       ProgramLocationId:req.body.ProgramLocationId,
+      LocationName:req.body.LocationName,
       Cost:req.body.Cost,
       StartDate:req.body.StartDate,
       EndDate:req.body.EndDate,
@@ -371,12 +726,35 @@ router.put('/Cources/:id',(req, res, next)=>{
         res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
       }
     }else{
-      res.status(200).json({"success":"Course Updated Successfully !"});
+      let newActivityLog = new ActivityLog({
+        UserId : req.body.UpdatedBy,
+        UserName : req.body.UserName,
+        UserType : req.body.UserType,
+        Page : "Course",
+        Action : "Update",
+        ImpectId : result._id,
+        CreatedIp : getIP(req).clientIp,
+        CreatedOn : req.body.UpdatedOn
+      });
+      newActivityLog.save()
+      .then(activity=>{
+          res.status(200).json({"success":"Course Updated Successfully !"});
+      })
+      .catch(err=>{
+        if(err.code === 11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+        }
+        else{
+          res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+        }
+      });
+
     }
   });
 });
 
-router.get('/changeStatus/:statusRecordId/:statusId/:academyid/:createdBy',(req,res,next)=>{
+router.get('/changeStatus/:statusRecordId/:statusId/:academyid/:createdBy/:UserType/:UserName',(req,res,next)=>{
   Cource.findOneAndUpdate({_id:req.params.statusRecordId},{$set:{StatusId:req.params.statusId}})
   .then(data=>{
     //res.status(200).json("Course Status Changed Successfully !");
@@ -385,11 +763,35 @@ router.get('/changeStatus/:statusRecordId/:statusId/:academyid/:createdBy',(req,
         StatusId : req.params.statusId,
         AcademyMstId : req.params.academyid,
         CreatedBy:req.params.createdBy,
-        CreatedIp : getIP(req).clientIp
+        CreatedIp : getIP(req).clientIp,
+        CreatedOn :moment().format("DD-MM-YYYY HH:mm:ss")
       });
       newStatus.save()
       .then(status=>{
-         res.status(200).json("Course Status Changed Successfully !");
+        let newActivityLog = new ActivityLog({
+          UserId : req.params.createdBy,
+          UserName : req.params.UserName,
+          UserType : req.params.UserType,
+          Page : "Course",
+          Action : "Change Status",
+          ImpectId : data._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json("Course Status Changed Successfully !");
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+
         })
         .catch(err =>{
           res.json(err);
@@ -433,8 +835,35 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
       //   message:"User does not exsist"
       // });
       return res.json("Username & Password is wrong!");
-    }else{
-      return res.json(user);
+    }else if(user[0].Active==false){
+      return res.json("You Are Deactivated, To Be Active Met To Admin !");
+    }
+    else{
+      console.log("User From Route = "+user[0].Active);
+      let newActivityLog = new ActivityLog({
+        UserId : user[0]._id,
+        UserName : user[0].UserName,
+        UserType : "Admin",
+        Page : "Login",
+        Action : "Login",
+        ImpectId : user[0]._id,
+        CreatedIp : getIP(req).clientIp,
+        CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+      });
+      newActivityLog.save()
+      .then(activity=>{
+          return res.json(user);
+      })
+      .catch(err=>{
+        if(err.code === 11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+        }
+        else{
+          console.log("Activity Log = "+err);
+          res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+        }
+      });
     }
   })
   .catch(err=>{
@@ -446,12 +875,40 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
   });
 
   router.post('/authenticateAcademy',(req,res,next)=>{
+    console.log("From Route "+JSON.stringify(req.body));
     Academy.find({EmailId:req.body.Email,Password:req.body.Password}).exec()
     .then(academy=>{
       if(academy.length<1){
         return res.json("Email & Password is wrong!");
-      }else{
-        return res.json(academy);
+      }
+      else if(academy[0].Active==false){
+        return res.json("You Are Deactivated, To Be Active Met To Admin !");
+      }
+      else{
+        let newActivityLog = new ActivityLog({
+          UserId : academy[0]._id,
+          UserName : academy[0].AcademyName || req.body.Email,
+          UserType : "Academy",
+          Page : "Login",
+          Action : "Login",
+          ImpectId : academy[0]._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+            return res.json(academy);
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            console.log("Activity Log = "+err);
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
       }
     })
     .catch(err=>{
@@ -465,8 +922,13 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
   // For location master
   // Retrive Data
   router.get('/locates',(req,res,next)=>{
-    Location.find(function(err,Location){
-      res.json(Location);
+    Location.find()
+    .sort({CreatedOn:-1})
+    .then(Locations=>{
+      res.json(Locations);
+    })
+    .catch(err=>{
+      res.json(err);
     });
   });
 
@@ -475,11 +937,34 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
     let newLocate = new Location({
       Loc_name: req.body.Loc_name,
       CreatedBy: req.body.CreatedBy,
-      CreatedIp : getIP(req).clientIp
+      CreatedIp : getIP(req).clientIp,
+      CreatedOn : req.body.CreatedOn
     });
     newLocate.save()
     .then(result =>{
-      res.status(200).json({"success":"Location Saved Successfully !"});
+      let newActivityLog = new ActivityLog({
+        UserId : req.body.CreatedBy,
+        UserName : req.body.UserName,
+        UserType : req.body.UserType,
+        Page : "Location",
+        Action : "Add",
+        ImpectId : result._id,
+        CreatedIp : getIP(req).clientIp,
+        CreatedOn : req.body.CreatedOn
+      });
+      newActivityLog.save()
+      .then(activity=>{
+        res.status(200).json({"success":"Location Saved Successfully !"});
+      })
+      .catch(err=>{
+        if(err.code === 11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+        }
+        else{
+          res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+        }
+      });
     })
     .catch(err => {
       if(err.code === 11000){
@@ -493,14 +978,44 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
   });
 
   // Deleting Data
-  router.delete('/Locates/:id',(req, res, next)=>{
-  	Location.remove({_id:req.params.id},function(err, result){
-  		if(err){
-  			res.json(err);
-  		}else{
-  			res.json({msg: "Location Deleted Successfully"});
-  		}
-  	});
+  router.delete('/Locates/:id/:UserId/:UserName',(req, res, next)=>{
+    Cource.find({ProgramLocationId:req.params.id})
+    .then(data=>{
+      if(data.length!=0){
+        res.status(200).json({"defaultError":"Some Record Depend On This One So You Can't Delete It !"});
+      }else{
+        Location.remove({_id:req.params.id},function(err, result){
+      		if(err){
+      			res.json(err);
+      		}else{
+            let newActivityLog = new ActivityLog({
+              UserId : req.params.UserId,
+              UserName : req.params.UserName,
+              UserType : "Admin",
+              Page : "Location",
+              Action : "Delete",
+              ImpectId : req.params.id,
+              CreatedIp : getIP(req).clientIp,
+              CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+            });
+            newActivityLog.save()
+            .then(activity=>{
+              res.json({msg: "Location Deleted Successfully"});
+            })
+            .catch(err=>{
+              if(err.code === 11000){
+                  var duplicateValue = err.message.match(/".*"/);
+                  res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+              }
+              else{
+                console.log("Activity Log = "+err);
+                res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+              }
+            });
+      		}
+      	});
+      }
+    });
   });
 
   // Updating Data
@@ -522,7 +1037,29 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
             res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
           }
         }else{
-          res.status(200).json({"success":"Location Updated Successfully !"});
+          let newActivityLog = new ActivityLog({
+            UserId : req.body.UpdatedBy,
+            UserName : req.body.UserName,
+            UserType : "Admin",
+            Page : "Location",
+            Action : "Update",
+            ImpectId : result._id,
+            CreatedIp : getIP(req).clientIp,
+            CreatedOn : req.body.UpdatedOn
+          });
+          newActivityLog.save()
+          .then(activity=>{
+            res.status(200).json({"success":"Location Updated Successfully !"});
+          })
+          .catch(err=>{
+            if(err.code === 11000){
+                var duplicateValue = err.message.match(/".*"/);
+                res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+            }
+            else{
+              res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+            }
+          });
         }
       });
     });
@@ -536,26 +1073,49 @@ router.post('/Registers',(req,res,next)=>{
     EmailId:req.body.EmailId,
     Password:req.body.Password,
     CreatedBy:req.body.CreatedBy,
-    CreatedIp : getIP(req).clientIp
+    CreatedIp : getIP(req).clientIp,
+    CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
   });
   newAcademy.save((err,academy)=>{
     if(err){
       console.log(err);
       res.json({msg:'Failed To Add Academy : '+err});
     }else{
-      console.log("Data Done");
-      res.json("Data Saved "+academy);
+      let newActivityLog = new ActivityLog({
+        UserId : req.body.CreatedBy,
+        UserName : req.body.EmailId,
+        UserType : "Academy",
+        Page : "Register",
+        Action : "Register First Time",
+        ImpectId : academy._id,
+        CreatedIp : getIP(req).clientIp,
+        CreatedOn : req.body.CreatedOn
+      });
+      newActivityLog.save()
+      .then(activity=>{
+        res.json("Data Saved "+academy);
+      })
+      .catch(err=>{
+        if(err.code === 11000){
+            var duplicateValue = err.message.match(/".*"/);
+            res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+        }
+        else{
+          res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+        }
+      });
     }
   });
 });
 
+
 router.put('/RegisterAcademy',(req,res,next)=>{
+  console.log(req.body.AcademyId);
   Academy.findOneAndUpdate({_id:req.body.AcademyId},{
     $set:{
       AcademyName: req.body.AcademyName,
       AcademyWebsite: req.body.AcademyWebsite,
-      AcademyLogo: req.body.AcademyLogo,
-      AcademyProfileImage: req.body.AcademyProfileImage,
+      AcademyLogo: localStorage.getItem('logo'),
       AcademyFounded: req.body.AcademyFounded,
       Headquarters:req.body.Headquarters,
       AcademyDiscription:req.body.AcademyDiscription,
@@ -563,17 +1123,121 @@ router.put('/RegisterAcademy',(req,res,next)=>{
       UpdatedOn:req.body.UpdatedOn,
       UpdatedBy:req.body.UpdatedBy,
       UpdatedIp : getIP(req).clientIp
-    }
-  },
-  function(err,result){
-    if(err){
-      console.log(err);
-    }else{
-      res.json(result);
-    }
-  });
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : "By Self",
+          UserType : "Academy",
+          Page : "Register",
+          Action : "Add Profile First Time",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : req.body.CreatedOn
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Academy Profile Save Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+  // function(err,result){
+  //   if(err){
+  //     console.log(err);
+  //   }else{
+  //     res.json(result);
+  //   }
+  // });
 })
 
+//for academy profile Update
+// Get Academy Details
+router.get('/getAcademyProfile/:academyId',(req,res,next)=>{
+  Academy.find({_id:req.params.academyId})
+  .then(academy=>{
+    res.json(academy);
+  })
+  .catch(err=>{
+    res.json(err);
+  });
+});
+
+router.put('/updateprofile',(req,res,next)=>{
+  Academy.findOneAndUpdate({_id:req.body.AcademyId},{
+    $set:{
+      AcademyName: req.body.AcademyName,
+      AcademyWebsite: req.body.AcademyWebsite,
+      AcademyLogo: localStorage.getItem('logo'),
+      AcademyFounded: req.body.AcademyFounded,
+      Headquarters:req.body.Headquarters,
+      AcademyDiscription:req.body.AcademyDiscription,
+      ZipCode:req.body.ZipCode,
+      UpdatedOn:req.body.UpdatedOn,
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : "Academy",
+          Page : "Academy Profile",
+          Action : "Update",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : req.body.UpdatedOn
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Profile updatation Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+  // function(err,result){
+  //   if(err){
+  //     console.log(err);
+  //   }else{
+  //     res.json(result);
+  //   }
+  // });
+})
+//end profileupdation
 
 router.post('/imageupload', upload.single('file'), (req, res, next) => {
     console.log('post file with content:');
@@ -586,7 +1250,7 @@ router.post('/imageupload', upload.single('file'), (req, res, next) => {
     if(req.params.ProgramName != "null")
     {
       //console.log("From Route in name");
-      Cource.find({ProgramName:new RegExp(req.params.ProgramName,'i')})
+      Cource.find({ProgramName:new RegExp(req.params.ProgramName,'i'),Active:true})
       .populate('AcademyId')
       .populate('ProgramLocationId')
       .then(data1=>{
@@ -602,7 +1266,7 @@ router.post('/imageupload', upload.single('file'), (req, res, next) => {
     if(req.params.ProgramType != "null")
     {
       //console.log("From Route in type");
-      Cource.find({ProgramType:req.params.ProgramType})
+      Cource.find({ProgramType:req.params.ProgramType,Active:true})
       .populate('AcademyId')
       .populate('ProgramLocationId')
       .then(data1=>{
@@ -618,7 +1282,7 @@ router.post('/imageupload', upload.single('file'), (req, res, next) => {
     if(req.params.ProgramName != "null" && req.params.ProgramType != "null")
     {
       //console.log("From Route in both");
-      Cource.find({ProgramName:new RegExp(req.params.ProgramName,'i'),ProgramType:req.params.ProgramType})
+      Cource.find({ProgramName:new RegExp(req.params.ProgramName,'i'),ProgramType:req.params.ProgramType,Active:true})
       .populate('AcademyId')
       .populate('ProgramLocationId')
       .then(data1=>{
@@ -633,28 +1297,34 @@ router.post('/imageupload', upload.single('file'), (req, res, next) => {
 });
 
 // router.get('/GetRightsList',(req,res,next)=>{
-// 
+//
 // });
 
 router.post('/Inquiry',function(req,res,next){
   let newInquiry = new Inquiry({
     AcademyId:req.body.AcademyId,
+    CourseId:req.body.CourseId,
     Phone:req.body.Phone,
     EmailId:req.body.EmailId,
     Name:req.body.Name,
     Notes:req.body.Notes,
-    CreatedIp : getIP(req).clientIp
+    CreatedIp : getIP(req).clientIp,
+    CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
   });
-  newInquiry.save((err,inquiry)=>{
-    if(err){
-      console.log(err);
-      res.json({msg:'Failed To Add Inquiry Details : '+err});
-    }else{
-      console.log("Inquiry Details Saved");
-      res.json("Inquiry Details Saved "+inquiry);
+  newInquiry.save()
+  .then(result =>{
+    res.status(200).json({"success":"Inquiry Submitted Successfully !"});
+  })
+  .catch(err => {
+    if(err.code === 11000){
+        var duplicateValue = err.message.match(/".*"/);
+        res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+    }
+    else{
+      res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
     }
   });
-});
+  });
 
 router.get('/academyCourses/:id',function(req,res,next){
   // Get Data From 1st Table: Course
@@ -667,6 +1337,456 @@ router.get('/academyCourses/:id',function(req,res,next){
   .catch(err=>{
     res.json(err);
   });
+});
+
+router.get('/InquiryList',function(req,res,next){
+  Inquiry.find()
+  .sort({CreatedOn:-1})
+  .populate('AcademyId')
+  .populate('CourseId')
+  .then(inquiry=>{
+    res.json(inquiry);
+  })
+  .catch(err=>{
+    res.json(err);
+  });
+});
+
+router.get('/InquiryList1/:academyID',function(req,res,next){
+  Inquiry.find({AcademyId:req.params.academyID})
+  .sort({CreatedOn:-1})
+  .populate('AcademyId')
+  .populate('CourseId')
+  .then(inquiry=>{
+    res.json(inquiry);
+  })
+  .catch(err=>{
+    res.json(err);
+  });
+});
+
+//for activity logs
+router.get('/Getactivity',function(req,res,next){
+  ActivityLog.find()
+  .sort({CreatedOn:-1})
+  .then(activity=>{
+    res.json(activity);
+  })
+  .catch(err=>{
+    res.json(err);
+  });
+});
+
+router.get('/logoutUser/:id/:UserName',function(req,res,next){
+  let newActivityLog = new ActivityLog({
+    UserId : req.params.id,
+    UserName : req.params.UserName,
+    UserType : "Admin",
+    Page : "Logout",
+    Action : "Logout",
+    ImpectId : req.params.id,
+    CreatedIp : getIP(req).clientIp,
+    CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+  });
+  newActivityLog.save()
+  .then(activity=>{
+    res.status(200).json({"success":"Logout Successfully !"});
+  })
+  .catch(err=>{
+    if(err.code === 11000){
+        var duplicateValue = err.message.match(/".*"/);
+        res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+    }
+    else{
+      res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+    }
+  });
+});
+
+router.get('/logoutAcademy/:id/:UserName',function(req,res,next){
+  let newActivityLog = new ActivityLog({
+    UserId : req.params.id,
+    UserName : req.params.UserName,
+    UserType : "Academy",
+    Page : "Logout",
+    Action : "Logout",
+    ImpectId : req.params.id,
+    CreatedIp : getIP(req).clientIp,
+    CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+  });
+  newActivityLog.save()
+  .then(activity=>{
+    res.status(200).json({"success":"Logout Successfully !"});
+  })
+  .catch(err=>{
+    if(err.code === 11000){
+        var duplicateValue = err.message.match(/".*"/);
+        res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+    }
+    else{
+      res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+    }
+  });
+});
+
+router.put('/activateUser',function(req,res,next){
+  User.findOneAndUpdate({_id:req.body.userId},{
+    $set:{
+      Active: true,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : "Admin",
+          Page : "User",
+          Action : "Activate User",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"User Activated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+});
+
+router.put('/deactivateUser',function(req,res,next){
+  User.findOneAndUpdate({_id:req.body.userId},{
+    $set:{
+      Active: false,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : "Admin",
+          Page : "User",
+          Action : "Dectivate User",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"User Dectivated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+});
+
+router.put('/activateCourse',function(req,res,next){
+  Cource.findOneAndUpdate({_id:req.body.courseId},{
+    $set:{
+      Active: true,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : req.body.UserType,
+          Page : "Couse",
+          Action : "Activate Couse",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Couse Activated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+});
+
+router.put('/deactivateCourse',function(req,res,next){
+  Cource.findOneAndUpdate({_id:req.body.courseId},{
+    $set:{
+      Active: false,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : req.body.UserType,
+          Page : "Course",
+          Action : "Dectivate Course",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Course Dectivated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+});
+
+router.put('/activateAcademy',function(req,res,next){
+  Academy.findOneAndUpdate({_id:req.body.academyId},{
+    $set:{
+      Active: true,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : "Admin",
+          Page : "Academy",
+          Action : "Activate Academy",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Academy Activated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+});
+
+router.put('/deactivateAcademy',function(req,res,next){
+  Academy.findOneAndUpdate({_id:req.body.academyId},{
+    $set:{
+      Active: false,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : "Admin",
+          Page : "Academy",
+          Action : "Dectivate Academy",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Academy Dectivated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+});
+
+router.put('/activateLocation',function(req,res,next){
+  Location.findOneAndUpdate({_id:req.body.locationId},{
+    $set:{
+      Active: true,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : "Admin",
+          Page : "Location",
+          Action : "Activate Location",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Location Activated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
+});
+
+router.put('/deactivateLocation',function(req,res,next){
+  Location.findOneAndUpdate({_id:req.body.locationId},{
+    $set:{
+      Active: false,
+      UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+      UpdatedBy:req.body.UpdatedBy,
+      UpdatedIp : getIP(req).clientIp
+    }},
+    {runValidators:true},
+    function(err,result){
+      if(err){
+        if(err.code===11000){
+          var duplicateValue = err.message.match(/".*"/);
+          res.status(200).json({"defaultError":duplicateValue[0]+" Is Alerady Exsist !"});
+        }else{
+          res.status(200).json({"error":err.message}||{"defaultError":"Error In Updation !"});
+        }
+      }else{
+        let newActivityLog = new ActivityLog({
+          UserId : req.body.UpdatedBy,
+          UserName : req.body.UserName,
+          UserType : "Admin",
+          Page : "Location",
+          Action : "Dectivate Location",
+          ImpectId : result._id,
+          CreatedIp : getIP(req).clientIp,
+          CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
+        });
+        newActivityLog.save()
+        .then(activity=>{
+          res.status(200).json({"success":"Location Dectivated Successfully !"});
+        })
+        .catch(err=>{
+          if(err.code === 11000){
+              var duplicateValue = err.message.match(/".*"/);
+              res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+          }
+          else{
+            res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
+          }
+        });
+      }
+    });
 });
 
 module.exports = router;

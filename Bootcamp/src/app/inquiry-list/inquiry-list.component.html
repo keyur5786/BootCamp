@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+<br><br>
+<div class="col-md-12 text-center">
+  <h2 class="page-header" style="text-align:center;"> Inquiry List </h2>
+  <!-- start search bar   -->
+  <div style="float:right;padding-bottom:5px;">
+   <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Serch Here"/>
+    <!-- <button (click)="GoForSearch()" ><b><i class="fa fa-search"></i>Search</b></button> -->
+  </div>
+  <!-- end search bar   -->
+<br/>
+  <table class="table table-bordered">
+    <thead>
+      <tr id="head" style="background-color:#12ACCF!important;">
+        <th>Date Time</th>
+        <th>Academy</th>
+        <th>Course</th>
+        <th>Phone</th>
+        <th>Email ID</th>
+        <th>Name</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+      <tr *ngFor = "let inquiry of Inquiry | filter : SearchText | paginate:{itemsPerPage:10, currentPage:p}">
+        <td>{{inquiry.CreatedOn}}</td>
+        <td>{{ inquiry.AcademyId?.AcademyName }}</td>
+        <td>{{ inquiry.CourseId?.ProgramName }} </td>
+        <td>{{ inquiry.Phone }}</td>
+        <td>{{ inquiry.EmailId }}</td>
+        <td>{{ inquiry.Name }}</td>
+        <td>{{ inquiry.Notes }}</td>
+      </tr>
+    <tbody>
+
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="p=$event"></pagination-controls>
+</div>

@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {BootcampService} from '../bootcamp.service';
@@ -11,7 +10,6 @@ import { Observable, Subject } from 'rxjs';
   providers:[BootcampService]
 })
 export class BootcampComponent implements OnInit {
-
     locate:any;
     txtProgramName:string;
     txtProgramType:any="";
@@ -20,10 +18,10 @@ export class BootcampComponent implements OnInit {
     locations:any;
     cources:any;
   constructor(private BootcampService:BootcampService,private router: Router) { }
-
    ngOnInit(){
      this.BootcampService.getData()
      .subscribe(data=>{
+       localStorage.clear();
        this.cources = data[0];
        this.locations = data[2];
      });

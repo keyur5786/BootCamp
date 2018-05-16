@@ -19,6 +19,7 @@ export class AcademyLoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    localStorage.clear();
   }
 
   onAcademyLogin(){
@@ -37,12 +38,15 @@ export class AcademyLoginComponent implements OnInit {
     this.AcademyLoginService.authenticateAcademy(academy).subscribe(data=>{
       if(data[0].EmailId){
         if(data[0].AcademyName==null){
+          sessionStorage.setItem('isLogin',"True");
           localStorage.setItem('AcademyID', data[0]._id);
+          localStorage.setItem('LoggerName',this.Email);
           this.router.navigate(['academyRegister']);
         }else{
           localStorage.setItem('AcademyID', data[0]._id);
+          localStorage.removeItem('LoggerId');
           localStorage.setItem('LoggerName', data[0].AcademyName);
-          this.router.navigate(['academyCourse']);
+          this.router.navigate(['academyHome']);
         }
       }else{
         this.flashMessage.show(data,{cssClass : 'alert-danger',timeout:5000});

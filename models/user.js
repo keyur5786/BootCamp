@@ -33,7 +33,7 @@ const UserSchema = mongoose.Schema({
 
   CreatedOn : {
     type: String,
-		default: moment().format('DD/MM/YYYY HH:MM:SS')
+		default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
   CreatedIp : {
@@ -58,7 +58,7 @@ const UserSchema = mongoose.Schema({
 
   Active : {
     type: Boolean,
-
+		default: true
   }
 });
 

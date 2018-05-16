@@ -1,0 +1,19 @@
+#head th{
+  text-align: center;
+  color:white;
+}
+/* .table th{
+  padding:0px;
+  text-align: center;
+  color:white;
+  border-color: black;
+}
+
+td{
+    text-align: center;
+    padding: 0px;
+} */
+.tbtn{
+  padding: 0px;
+  border-radius: 0px;
+}

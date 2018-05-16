@@ -3,7 +3,7 @@
 "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="wrapper">
-
+<div style="position:fixed; top:100px; right:20px; z-index:999;"> <flash-messages></flash-messages> </div>
   <nav class="navbar navbar-default" style="z-index: 2;">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -20,55 +20,101 @@
 
 
 <div class="col-md-12">
+  <!-- start search bar   -->
+  <div style="float:right;padding-bottom:5px;">
+   <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Search Here"placeholder="Search Here" />
+    <!-- <button (click)="GoForSearch()" ><b><i class="fa fa-search"></i>Search</b></button> -->
+  </div>
+  <!-- end search bar   -->
+<br/>
 <table class="table table-bordered" style="">
   <thead>
-    <tr class="btn-primary">
-      <th>Academy</th>
-       <th>ProgramName</th>
-      <th>ProgramType</th>
-      <th>ProgramDuration</th>
+    <tr style="background-color: #12ACCF!important;">
+      <th class="f2">Logo</th>
+      <th class="f2">Academy</th>
+      <th class="f2">ProgramName</th>
+      <th class="f2">ProgramType</th>
+      <th class="f2">ProgramDuration</th>
 
       <!-- <th>ProgramDescription</th> -->
       <!-- <th>ProgramSubject</th> -->
       <!-- <th>ProgramLocation</th> -->
-      <th>Cost</th>
-      <th>Career Services</th>
-      <th>Financing</th>
-      <th>Scholership</th>
+      <th class="f2">Cost</th>
+      <th class="f2">Career Services</th>
+      <th class="f2">Financing</th>
+      <th class="f2">Scholarship</th>
       <!-- <th>StartDate</th>
       <th>Length</th>
       <th>Classsize</th>
       <th>Commitment</th> -->
-      <th>Action</th>
+      <th class="f2">Action</th>
     </tr>
   </thead>
   <tbody >
-    <tr *ngFor = "let cource of SearchData">
-      <td>{{cource.AcademyId?.AcademyName}}</td>
-      <td>{{ cource.ProgramName }}</td>
-      <td *ngIf="cource.ProgramType==1">Front End Web Application Development</td>
-      <td *ngIf="cource.ProgramType==2">Full Stack Applicationd Development</td>
-      <td *ngIf="cource.ProgramType==3">User Experience Design</td>
+    <tr *ngFor = "let cource of SearchData | filter : SearchText | paginate:{itemsPerPage:10, currentPage:p}">
+      <td class="f2"><img src="../../assets/{{cource.AcademyId?.AcademyLogo}}" height=50px width=50px></td>
+      <td class="f2">{{cource.AcademyId?.AcademyName}}</td>
+      <td class="f2">{{ cource.ProgramName }}</td>
+      <td *ngIf="cource.ProgramType==1" class="f2">Front End Web Application Development</td>
+      <td *ngIf="cource.ProgramType==2" class="f2">Full Stack Applicationd Development</td>
+      <td *ngIf="cource.ProgramType==3" class="f2">User Experience Design</td>
 
-      <td>{{ cource.ProgramDuration }}</td>
+      <td class="f2">{{ cource.ProgramDuration }}</td>
 
       <!-- <td>{{ cource.ProgramDescription }}</td> -->
       <!-- <td>{{ cource.ProgramSubject }}</td> -->
       <!-- <td>{{ cource.ProgramLocationId?.Loc_name }}</td> -->
-       <td>{{ cource.Cost }}</td>
-       <td></td>
-       <td></td>
-       <td></td>
+       <td class="f2">{{ cource.Cost }}</td>
+       <td *ngIf="cource.CareerServices" class="f2">Yes</td>
+       <td *ngIf="!cource.CareerServices" class="f2">No</td>
 
+       <td *ngIf="cource.Financing" class="f2">Yes</td>
+       <td *ngIf="!cource.Financing" class="f2">No</td>
+
+       <td *ngIf="cource.Scholarship" class="f2">Yes</td>
+       <td *ngIf="!cource.Scholarship" class="f2">No</td>
       <!--<td>{{ cource.StartDate }}</td>
       <td>{{ cource.Length }}</td>
       <td>{{ cource.Classsize }}</td>
       <td>{{ cource.Commitment }}</td> -->
       <td>
-        <button type="button" (click)="ShowDetails(cource._id,cource.AcademyId._id)"><b><i class="fa fa-search"></i>Details</b></button>&nbsp;
-        <button type="button" (click)="DirectInquiry(cource._id,cource.AcademyId._id)"><b><i class="fa fa-search"></i>Direct Inquiry</b></button>
+        <button type="button" (click)="ShowDetails(cource._id,cource.AcademyId._id)" style="background-color: #12ACCF!important;color:white;"><b><i class="fa fa-search" style="color:white;"></i>Details</b></button>&nbsp;
+        <button type="button" (click)="DirectInquiry(cource.AcademyId._id,cource._id)" style="background-color: #12ACCF!important;color:white;"><b><i class="fa fa-search"  style="color:white;"></i>Direct Inquiry</b></button>
       </td>
     </tr>
   </tbody>
 </table>
+<pagination-controls (pageChange)="p=$event"></pagination-controls>
+</div>
+
+<div id="popUP" *ngIf="POPUP" style="position:fixed; top:10%; left:45%;width:30%;border:1px solid black; ">
+  <header style="background-color: #337ab7;padding:1px;">
+  <button type="button" class="btn btn-default" (click)="inquiryPopUp()" id="close" style="padding:1px!important;background-color: #337ab7;border:none;"><i class="fa fa-close" style="font-size:36px;color:white!important;hight:20px;font-size:20px!important;margin-top:2%!important;"></i></button>
+  <h1 style="color:white;"> Inquiry </h1>
+</header><br>
+  <form (submit)="onInquiry()">
+    <table>
+        <input  type="text" [(ngModel)]="PopAcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+      <tr>
+        <td>Name</td>
+        <td ><input  type="text" [(ngModel)]="PopName" name="Name" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td>Phone No</td>
+        <td ><input  type="number" [(ngModel)]="PopPhone" name="Phone" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td>EmailId</td>
+        <td ><input  type="text" [(ngModel)]="PopEmailId" name="EmailId" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td>Notes</td>
+        <td ><input  type="Notes" [(ngModel)]="PopNotes" name="Notes" style="margin-left:20%!important;"></td>
+      </tr><br>
+      <tr>
+        <td></td>
+        <td><button type="submit" name="submit" class="btn btn-primary">Submit</button></td>
+      </tr>
+    </table>
+  </form>
 </div>

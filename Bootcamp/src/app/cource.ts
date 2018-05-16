@@ -23,4 +23,5 @@ export class Cource{
   CreatedOn?:string;
   UpdatedOn?:any;
   Active?:boolean;
+  ByAcademy?:boolean;
 }

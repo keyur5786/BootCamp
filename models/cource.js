@@ -6,8 +6,8 @@ const CourceSchema = mongoose.Schema({
 		required: [true,'Program Type Is Required Field !']
 	},
 
-  AcademyId : {
-    type: String,
+  AcademyId :{
+     type: String, //mongoose.Schema.ObjectId,
     ref: 'Academy',
     required: [true,'Select Academy From Dropdown Field !']
   },
@@ -41,6 +41,11 @@ const CourceSchema = mongoose.Schema({
     type: String,
     ref: 'Location',
     required: [true,'Program Location Is Required Field !']
+  },
+
+  LocationName :{
+    type: String,
+    required: [true,'Location Name Not Found !']
   },
 
   Cost : {
@@ -95,6 +100,10 @@ const CourceSchema = mongoose.Schema({
 
   },
 
+  ByAcademy : {
+    type: Boolean
+  },
+
   CreatedBy : {
     type: String,
   },
@@ -105,7 +114,7 @@ const CourceSchema = mongoose.Schema({
 
   CreatedOn : {
     type: String,
-    default: moment().format('DD/MM/YYYY HH:MM:SS')
+    default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
   UpdatedOn : {

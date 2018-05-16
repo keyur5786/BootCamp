@@ -25,6 +25,15 @@ import { InquiryComponent } from './inquiry/inquiry.component';
 import { AcademyCoursesComponent } from './academy-courses/academy-courses.component';
 import { AcademyCourseComponent } from './academy-course/academy-course.component';
 import { AcademyNavbarComponent } from './academy-navbar/academy-navbar.component';
+import { AcademypanelComponent } from './academypanel/academypanel.component';
+import { InquiryListComponent } from './inquiry-list/inquiry-list.component';
+import { AcademyHomeComponent } from './academy-home/academy-home.component';
+import { AcademyInquiryListComponent } from './academy-inquiry-list/academy-inquiry-list.component';
+import { ProfileupdateComponent } from './profileupdate/profileupdate.component';
+import { AdminActivityComponent } from './admin-activity/admin-activity.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 const appRoutes:Routes = [
 {path:"",component:BootcampComponent},
@@ -33,7 +42,7 @@ const appRoutes:Routes = [
 {path:"register",component:RegisterComponent},
 {path:"academyRegister",component:AcademyRegisterComponent},
 {path:"user", component: UserComponent},
-{path:"cource", component: CourceComponent},
+{path:"course", component: CourceComponent},
 {path:"academy", component: AcademyComponent},
 {path:"imageupload", component: ImageuploadComponent},
 {path:"uploadFile", component: UploadTestComponent},
@@ -43,7 +52,14 @@ const appRoutes:Routes = [
 {path:"CourseDetails",component:CourseDetailsComponent},
 {path:"inquiry",component:InquiryComponent},
 {path:"academyCourse",component:AcademyCoursesComponent},
-{path:"singleAcademyCourse",component:AcademyCourseComponent}
+{path:"singleAcademyCourse",component:AcademyCourseComponent},
+{path:"academypanel",component:AcademypanelComponent},
+{path:"inquiryList",component:InquiryListComponent},
+{path:"academyHome",component:AcademyHomeComponent},
+{path:"academyInquiries",component:AcademyInquiryListComponent},
+{path:"profileupdate",component:ProfileupdateComponent},
+{path:"adminactivity",component:AdminActivityComponent},
+{path:"adminHome",component:AdminHomeComponent}
 ]
 
 @NgModule({
@@ -65,9 +81,16 @@ const appRoutes:Routes = [
     AcademyRegisterComponent,
     AcademyLoginComponent,
     InquiryComponent,
+    InquiryListComponent,
     AcademyCoursesComponent,
     AcademyCourseComponent,
-    AcademyNavbarComponent
+    AcademyNavbarComponent,
+    AcademypanelComponent,
+    AcademyHomeComponent,
+    AcademyInquiryListComponent,
+    ProfileupdateComponent,
+    AdminActivityComponent,
+    AdminHomeComponent
 ],
   imports: [
     BrowserModule,
@@ -75,7 +98,9 @@ const appRoutes:Routes = [
     FormsModule,
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    Ng2SearchPipeModule,
+	  NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,88 +1,103 @@
 <app-navbar></app-navbar>
-<style>
-.table th{
-  padding:0px;
-  text-align: center;
-
-  color:white;
-  border-color: black;
-}
-
-td{
-    text-align: center;
-    padding: 0px;
-}
-body{
-  background-color: #ddd!important;
-}
-.un{
-margin-left: 7px;
-}
-
-.tbtn{
-  padding: 0px;
-
-}
-</style>
 <div class="container">
-    <div style="position:fixed; top:100px; right:20px;"> <flash-messages></flash-messages> </div>
+    <div style="position:fixed; top:100px; right:20px;z-index:999;"> <flash-messages></flash-messages> </div>
   <form (submit) = "addUser()" *ngIf="!toggleForm">
       <h2 class="page-header" style="text-align:center;padding-top: 35px;">User</h2>
       <br/>
       <div class="row">
+          <label class="un">FirstName </label>
+          <input type="text" [(ngModel)]="FirstName" name="FirstName"  class="un">
 
-               <label class="un">FirstName </label>
-               <input type="text" [(ngModel)]="FirstName" name="FirstName"  class="un">
+          <label class="un">LastName </label>
+          <input type="text" [(ngModel)]="LastName" name="LastName" class="un" >
 
-               <label class="un">LastName </label>
-               <input type="text" [(ngModel)]="LastName" name="LastName" class="un" >
+          <label class="un">UserName </label>
+          <input type="text" [(ngModel)]="UserName" name="UserName" class="un" >
 
-                    <label class="un">UserName </label>
-                    <input type="text" [(ngModel)]="UserName" name="UserName" class="un" >
-
-                    <label class="un">Password </label>
-                    <input type="password" [(ngModel)]="Password" name="Password" class="un"  >
-
-                </div>
+          <label class="un">Password </label>
+          <input type="password" [(ngModel)]="Password" name="Password" class="un"  >
+      </div>
 <br/>
 
-
-
-    <!-- <div class="form-group">
-      RoleId <input type="text" [(ngModel)]="RoleId" name="RoleId" clss="form-control">
-    </div> -->
-    <div class="text-center">
-    <button type="submit" name="submit" class="btn btn-primary" align="center" value="Save"> Save </button>
+<div class="col-md-12">
+  <h2 class="page-header" style="text-align:center;">Rights List</h2>
+  <small> <input type="checkbox" (change)="checkAll()"> <b> Checked All </b> </small>
+  <table class="table table-bordered ">
+    <thead>
+      <tr style="background-color: #12ACCF!important;">
+        <th>Form Name</th>
+        <th>Add</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let right of UserRights">
+        <td>{{ right.FormName }}</td>
+        <td><input type="checkbox" name="add" [(ngModel)]="right.Add"/></td>
+        <td><input type="checkbox" name="edit" [(ngModel)]="right.Edit"/></td>
+        <td><input type="checkbox" name="delete" [(ngModel)]="right.Delete"/></td>
+        <td><input type="checkbox" name="view" [(ngModel)]="right.View"/></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="text-center">
+    <button type="submit" name="submit" class="btn btn-primary" align="center" value="Save" style="width:70px;"> Save </button>
+<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;">Clear</button>
 </div>
   </form>
 
 <form #editfrm="ngForm" (ngSubmit)="editUser(editfrm)" *ngIf="toggleForm">
 <h2 class="page-header" style="text-align:center;padding-top: 35px;"> Edit User</h2>
 <div class="row">
+  <label class="un">FirstName </label>
+  <input type="text" [ngModel]="user.FirstName" name="FirstName" class="un" >
 
-         <label class="un">FirstName </label>
-         <input type="text" [ngModel]="user.FirstName" name="FirstName" class="un" >
+  <label class="un">LastName </label>
+  <input type="text" [ngModel]="user.LastName" name="LastName" class="un">
 
-         <label class="un">LastName </label>
-         <input type="text" [ngModel]="user.LastName" name="LastName" class="un">
+  <label class="un"> UserName </label>
+  <input type="text" [ngModel]="user.UserName" name="UserName" class="un" >
 
-              <label class="un"> UserName </label>
-              <input type="text" [ngModel]="user.UserName" name="UserName" class="un" >
-
-              <label class="un">Password </label>
-              <input type="password" [ngModel]="user.Password" name="Password"  class="un" >
-
-          </div>
+  <label class="un">Password </label>
+  <input type="password" [ngModel]="user.Password" name="Password"  class="un" >
+</div>
 <br/>
 
+<div class="col-md-12">
+  <h2 class="page-header" style="text-align:center;">Rights List</h2>
+  <table class="table table-bordered ">
+    <thead>
+      <tr style="background-color: #12ACCF!important;">
+        <th>Form Name</th>
+        <th>Add</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let myRights of singleRights; let i = index">
+        <td>{{ myRights.FormName }}</td>
+        <input type="hidden" [(ngModel)]="myRights._id" name="rightsID_{{i}}">
+        <td><input type="checkbox" [(ngModel)]="myRights.Add" name="add_{{i}}" [checked]="myRights.Add"></td>
+        <td><input type="checkbox" [(ngModel)]="myRights.Edit" name="edit_{{i}}" [checked]="myRights.Edit"></td>
+        <td><input type="checkbox" [(ngModel)]="myRights.Delete" name="delete_{{i}}" [checked]="myRights.Delete"></td>
+        <td><input type="checkbox" [(ngModel)]="myRights.View" name="view_{{i}}" [checked]="myRights.View"></td>
+        <!-- <td> {{myRights.Add}} </td>
+        <td> {{myRights.Edit}} </td>
+        <td> {{myRights.Delete}} </td>
+        <td> {{myRights.View}} </td> -->
+      </tr>
+    </tbody>
+  </table>
 
-
-<!-- <div class="form-group">
-  <label for=""> RoleId : </label>
-  <input type="text" name="RoleId" class="form-control" [ngModel]="user.RoleId">
-</div> -->
+</div>
 <div class="text-center">
-<button type="submit" name="submit" class="btn btn-primary" align="center"> Save </button>
+<button type="submit" name="submit" class="btn btn-primary" align="center" style="width:70px;"> Save </button>
+<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;">Clear</button>
 </div>
 </form>
 <br/>
@@ -90,10 +105,15 @@ margin-left: 7px;
 
 <div class="col-md-12">
   <h2 class="page-header" style="text-align:center;">Users List</h2>
+  <div style="float:right;padding-bottom:5px;">
+   <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Search Here"/>
+    <!-- <button (click)="GoForSearch()" ><b><i class="fa fa-search"></i>Search</b></button> -->
+  </div>
   <table class="table table-bordered ">
     <thead>
-      <tr class="btn-primary">
+      <tr style="background-color: #12ACCF!important;">
         <!-- <th>UserId</th> -->
+        <th> Date Time </th>
         <th>FirstName</th>
         <th>LastName</th>
         <th>UserName</th>
@@ -105,21 +125,27 @@ margin-left: 7px;
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor = "let user of users">
+      <tr *ngFor = "let user of users | filter : SearchText | paginate:{itemsPerPage:10, currentPage:p}">
         <!-- <td>{{ user.UserId }}</td> -->
+        <td>{{user.CreatedOn}}</td>
         <td>{{ user.FirstName }}</td>
         <td>{{ user.LastName }}</td>
         <td>{{ user.UserName }}</td>
         <!-- <td>{{ user.RoleId }}</td> -->
         <td>
           <form>
-            <button type="submit" name="submit" (click)="deleteuser(user._id,user.UserName)" value="Delete" class="btn btn-danger tbtn">Delete</button>
-<button type="submit" name="submit" class="btn btn-primary tbtn" (click)="showEditForm(user)"> Edit </button>
+<button type="submit" name="submit" (click)="deleteuser(user._id,user.UserName)" value="Delete" class="btn-danger tbtn">Delete</button>
+<button type="submit" name="submit" class="btn btn-primary tbtn" (click)="showEditForm(user._id)"> Edit </button>
+<button type="submit" name="submit" class="btn btn-primary tbtn" (click)="activateUser(user._id,user.UserName)" *ngIf="user.Active==false"> Activate </button>
+<button type="submit" name="submit" class="btn-danger tbtn" (click)="deactivateUser(user._id,user.UserName)" *ngIf="user.Active==true"> Deactivate </button>
 </form>
 </td>
       </tr>
     </tbody>
   </table>
+  <div style="text-align:center;">
+    <pagination-controls (pageChange)="p=$event"></pagination-controls>
+  </div>
 </div>
 
 <!-- <div class="container">

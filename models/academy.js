@@ -10,7 +10,13 @@ const AcademySchema = mongoose.Schema({
 
 	AcademyWebsite : {
 		type: String,
-		maxlength: [50,'Academy Website Name Is Too Large !']
+		maxlength: [50,'Academy Website Name Is Too Large !'],
+		validate: {
+					 validator: function(v) {
+						 return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g.test(v);
+					 },
+					 message: '{VALUE} Is Invalid Web URL !'
+				 }
 	},
 
  AcademyLogo : {
@@ -44,6 +50,12 @@ const AcademySchema = mongoose.Schema({
 	type: String,
 	required: [true,'Email ID Is Required Field !'],
 	maxlength: [50,'Email ID Is Too Large !'],
+	validate: {
+				 validator: function(v) {
+					 return /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(v);
+				 },
+				 message: '{VALUE} Is Invalid Email !'
+			 },
 	unique: [true]
 	},
 
@@ -64,7 +76,7 @@ const AcademySchema = mongoose.Schema({
 
   CreatedOn : {
     type: String,
-		default: moment().format('DD/MM/YYYY HH:MM:SS')
+		default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
 	UpdatedOn : {

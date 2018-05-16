@@ -6,22 +6,31 @@ import { UserRights } from '../user';
 import * as moment from 'moment';
 import {FlashMessagesService} from 'angular2-flash-messages';
 import {Router} from '@angular/router';
+import {LoginServiceService} from '../login-service.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
-  providers: [UserService,FlashMessagesService]
+  providers: [UserService,FlashMessagesService,LoginServiceService]
 })
 export class UserComponent implements OnInit {
   users:User[]=[];
-  UserRights:UserRights[]=[];
+  UserRights:any;
+
   user:User;
+  singleRights:any;
+
   FirstName: string;
   LastName: string;
   UserName: string;
   Password: string;
   toggleForm:boolean=false;
-  constructor(private UserService:UserService, private router:Router,private flashMessage:FlashMessagesService) { }
+
+  myRights:any;
+  userAdd:boolean=false;
+  userEdit:boolean=false;
+  userDelete:boolean=false;
+  constructor(private LoginServiceService:LoginServiceService,private UserService:UserService, private router:Router,private flashMessage:FlashMessagesService) { }
 
   getUsers(){
     this.UserService.getUsers()
@@ -38,18 +47,45 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     var checkLogin = localStorage.getItem("LoggerId");
     if(checkLogin==null){
-      this.router.navigate(['admin']);
+      this.router.navigate(['']);
     }
-    console.log("checkLogin = "+checkLogin);
-    this.UserService.getUsers()
-    .subscribe(users=>{
-        this.users = users;
-        this.FirstName = "";
-        this.LastName = "";
-        this.UserName = "";
-        this.Password = "";
-        this.toggleForm=false;
-    });
+
+    this.LoginServiceService.GetRightsListByUserId(localStorage.getItem('LoggerId'))
+    .subscribe(data=>{
+      this.myRights=data;
+      for (let i = 0; i < this.myRights.length; i++) {
+          if(this.myRights[i].FormName == "User")
+          {
+            if(this.myRights[i].View == false)
+            {
+              //this.router.navigate(['adminHome']);
+              //return false;
+            }
+            if(this.myRights[i].Add == true){
+              this.userAdd = true;
+            }
+            if(this.myRights[i].Edit==true){
+              this.userEdit = true;
+            }
+            if(this.myRights[i].Delete==true){
+              this.userDelete = true;
+            }
+          }
+        }
+        this.UserService.getUsers()
+        .subscribe(users=>{
+            this.users = users;
+            this.FirstName = "";
+            this.LastName = "";
+            this.UserName = "";
+            this.Password = "";
+            this.toggleForm=false;
+            this.UserService.getUsersRights()
+            .subscribe(rights=>{
+              this.UserRights=rights;
+            })
+        });
+      });
   }
 
   deleteuser(id:any,user:any){
@@ -57,7 +93,9 @@ export class UserComponent implements OnInit {
       return false;
     }
      var users = this.users;
-     this.UserService.deleteuser(id)
+     var UserId = localStorage.getItem("LoggerId");
+     var UserName = localStorage.getItem("LoggerName");
+     this.UserService.deleteuser(id,UserId,UserName)
    .subscribe(data=>{
       if(data.n==1){
        for(var i=0; i<users.length;i++){
@@ -82,9 +120,15 @@ export class UserComponent implements OnInit {
       LastName: this.LastName,
       UserName: this.UserName,
       Password: this.Password,
-      CreatedBy : localStorage.getItem("LoggerId")
+      CreatedBy : localStorage.getItem("LoggerId"),
+      CreatedOn :moment().format("DD-MM-YYYY HH:mm:ss")
     }
-    this.UserService.addUser(newUser).subscribe(result=>{
+
+    var rightsList=this.UserRights;
+    var list=[];
+    list.push({newUser},{rightsList});
+
+    this.UserService.addUser(list).subscribe(result=>{
       if(result.success){
         this.flashMessage.show(result.success,{cssClass:'alert-success',timeout:5000});
         this.ngOnInit();
@@ -102,20 +146,36 @@ export class UserComponent implements OnInit {
     }
 
   editUser(form){
-  let newUser:User={
+     console.log(form.value);
+  let newUser={
     _id: this.user._id,
     FirstName: form.value.FirstName,
     LastName: form.value.LastName,
     UserName: form.value.UserName,
     Password: form.value.Password,
-    UpdatedOn:moment().format('DD/MM/YYYY HH:MM:SS'),
-    UpdatedBy: localStorage.getItem("LoggerId")
+    UpdatedOn:moment().format('DD/MM/YYYY HH:mm:ss'),
+    UpdatedBy: localStorage.getItem("LoggerId"),
+    ByUser : localStorage.getItem("LoggerName")
   }
   this.UserService.updateUser(newUser)
   .subscribe(result=>{
     if(result.success){
-      this.flashMessage.show(result.success,{cssClass:'alert-success',timeout:3000});
-      this.ngOnInit();
+      var rightsArray=[];
+      for(var i=0;i<this.singleRights.length;i++){
+        var r="rightsID_"+i;
+        var a="add_"+i;
+        var e="edit_"+i;
+        var d="delete_"+i;
+        var v="view_"+i;
+       rightsArray.push({id:form.value[r],add:form.value[a],edit:form.value[e],delete:form.value[d],view:form.value[v],UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+       UpdatedBy: localStorage.getItem("LoggerId")});
+      }
+      console.log("My Rights Array = "+JSON.stringify(rightsArray));
+      this.UserService.updateRights(rightsArray)
+      .subscribe(result=>{
+        this.flashMessage.show(result.success,{cssClass:'alert-success',timeout:3000});
+        this.ngOnInit();
+      });
     }else{
       if(result.defaultError){
         this.flashMessage.show(result.defaultError,{cssClass:'alert-danger',timeout:5000});
@@ -129,11 +189,58 @@ export class UserComponent implements OnInit {
 
 }
 
-  showEditForm(user){
-  this.user= user;
-  this.toggleForm = true;
+checkAll(){
+  for(var i=0;i<this.UserRights.length;i++){
+    this.UserRights[i].Add = !this.UserRights[i].Add;
+    this.UserRights[i].Edit = !this.UserRights[i].Edit;
+    this.UserRights[i].Delete = !this.UserRights[i].Delete;
+    this.UserRights[i].View = !this.UserRights[i].View;
+  }
+}
+
+  showEditForm(userId){
+    this.UserService.getUserDetail(userId)
+    .subscribe(user=>{
+    // console.log("User Data = "+JSON.stringify(user));
+    this.user = user[0][0];
+    this.singleRights = user[1];
+    // console.log("Rights = "+JSON.stringify(this.singleRights));
+    this.toggleForm = true;
+      //console.log("Data From DataService : "+ this.shoppingItemList[0].itemName);
+    });
+  //this.user= user;
   }
 
+  activateUser(userId,userName){
+    if(!confirm("Are You Sure To Activate "+userName+" ?")){
+      return false;
+    }
+    const userObject = {
+      userId: userId,
+      UpdatedBy:localStorage.getItem("LoggerId"),
+      UserName:localStorage.getItem("LoggerName")
+    };
+    this.UserService.activateUser(userObject)
+    .subscribe(user=>{
+      this.flashMessage.show(user.success,{cssClass:'alert-success',timeout:3000});
+      this.ngOnInit();
+    });
+  }
 
+  deactivateUser(userId,userName){
+    if(!confirm("Are You Sure To Dectivate "+userName+" ?")){
+      return false;
+    }
+    const userObject = {
+      userId: userId,
+      UpdatedBy:localStorage.getItem("LoggerId"),
+      UserName:localStorage.getItem("LoggerName")
+    };
+    this.UserService.deactivateUser(userObject)
+    .subscribe(user=>{
+      this.flashMessage.show(user.success,{cssClass:'alert-success',timeout:3000});
+      this.ngOnInit();
+    });
+  }
 
 }

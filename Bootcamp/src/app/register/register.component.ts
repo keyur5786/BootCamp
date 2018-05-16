@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {RegisterService} from '../register.service';
 import { Register } from '../register';
 import {Router} from '@angular/router';
+import * as moment from 'moment';
 import {FlashMessagesService} from 'angular2-flash-messages';
 @Component({
   selector: 'app-register',
@@ -46,7 +47,8 @@ export class RegisterComponent implements OnInit {
       const Academy = {
         EmailId : this.EmailId,
         Password : this.Password,
-        CreatedBy : "By Self"
+        CreatedBy : "By Self",
+        CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
       }
       this.RegisterService.addAcademy(Academy).subscribe(data=>{
         if(data){

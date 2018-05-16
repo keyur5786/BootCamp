@@ -7,24 +7,32 @@ const InquirySchema = mongoose.Schema({
     required: true
   },
 
+  CourseId : {
+    type: String,
+    ref: 'Cource'
+  },
+
   Phone : {
     type: Number,
-    required: true
+    required: [true,'Phone Number Is Required !']
   },
 
 	EmailId : {
 		type: String,
-		required: true
+		required: [true,'Email ID Is Required !'],
+    maxlength: [50,'Email ID Should Be Less Than 50 Characters !']
 	},
 
   Name : {
     type: String,
-    required: true
+    required: [true,'Name Is Required !'],
+    maxlength: [50,'Name Should Be Less Than 50 Characters !']
   },
 
   Notes : {
     type: String,
-    required: true
+    required: [true,'Notes Is Required !'],
+    maxlength: [500,'Notes Should Be Less Than 500 Characters !']
   },
 
   CreatedBy : {
@@ -37,7 +45,7 @@ const InquirySchema = mongoose.Schema({
 
   CreatedOn : {
     type: String,
-    default: moment().format('DD/MM/YYYY HH:MM:SS')
+    default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
   UpdatedOn : {

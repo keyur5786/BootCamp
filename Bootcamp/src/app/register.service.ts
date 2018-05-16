@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Http,Headers} from '@angular/http';
 import {Register} from './register';
 import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/observable';
 
 @Injectable()
 export class RegisterService {
@@ -22,4 +23,30 @@ return this.http.put('http://localhost:3000/api/RegisterAcademy',Academy,{header
 .map(res=>res.json());
 }
 
+uploadMediaFileR(file): Observable<any> {
+  console.log("sercive");
+console.log(file);
+  return this.http.post('http://localhost:3000/api/imageuploadR/',file)
+    .map(res => res.json())
+}
+
+// for acdemy profile update
+getAcademy(AcademyId){
+  return this.http.get('http://localhost:3000/api/getAcademyProfile/'+AcademyId)
+  .map(res=>res.json());
+}
+
+ Updateprofile(Academy){
+  let headers = new Headers();
+ headers.append('Content-Type','application/json');
+  return this.http.put('http://localhost:3000/api/updateprofile',Academy,{headers:headers})
+ .map(res=>res.json());
+ }
+
+ uploadMediaFileU(file): Observable<any> {
+   console.log("sercive");
+ console.log(file);
+   return this.http.post('http://localhost:3000/api/imageuploadU/',file)
+     .map(res => res.json())
+ }
 }

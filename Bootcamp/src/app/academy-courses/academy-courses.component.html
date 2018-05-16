@@ -1,10 +1,16 @@
 <div class="col-md-12 text-center">
   <h2 class="page-header" style="text-align:center;"> Courses List </h2>
-  <div class="float-left"><a href="singleAcademyCourse"> <button class="btn btn-primary"> Manage Courses </button> </a> </div> 
+  <!-- start search bar   -->
+  <div style="float:right;padding-bottom:5px;">
+   <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Serch Here"/>
+    <!-- <button (click)="GoForSearch()" ><b><i class="fa fa-search"></i>Search</b></button> -->
+  </div>
+  <!-- end search bar   -->
+  <div class="float-left"><a href="singleAcademyCourse"> <button class="btn btn-primary"> Manage Courses </button> </a> </div>
 <br/>
   <table class="table table-bordered">
     <thead>
-      <tr class="btn-primary">
+      <tr style="background-color: #12ACCF!important;">
         <th>Academy</th>
         <th>ProgramType</th>
         <th>ProgramDuration</th>
@@ -20,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor = "let cource of Courses">
+      <tr *ngFor = "let cource of Courses | filter : SearchText | paginate:{itemsPerPage:10, currentPage:p}">
         <td>{{cource.AcademyId?.AcademyName}}</td>
         <td *ngIf="cource.ProgramType==1">Front End Web Application Development</td>
         <td *ngIf="cource.ProgramType==2">Full Stack Application Development</td>
@@ -38,5 +44,5 @@
       </tr>
     </tbody>
   </table>
-
+<pagination-controls (pageChange)="p=$event"></pagination-controls>
 </div>

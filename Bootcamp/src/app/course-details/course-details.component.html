@@ -1,12 +1,20 @@
 
 <!-- menubar -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-<flash-messages></flash-messages>
+<link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<div style="position:fixed; top:100px; right:20px;z-index:999;"> <flash-messages></flash-messages> </div>
 <style>
 #img{
   width: 100%;
   height:400px;
   background-image: url("../../assets/new-york-5e8de62b752677710ab7645fa354465f.jpg");
+
 }
 .btn-primary {
 
@@ -14,37 +22,484 @@
 
 }
 </style>
+
+<body>
+  <!-- <video autoplay muted loop id="myVideo">
+    <source src="../../assets/campus_experience_header.webm" type="video/mp4">
+
+  </video> -->
+
 <div id="img">
-  <br><br><br>
-  <div style="width:28%;background-color:white;margin-left:50%;">
-    <h1 style="color:#d43d2e; Font-family:Linux Libertine, Georgia, Times, serif;" align="center"> Inquiry </h1>
-    <form style="margin-top:4%;">
+  <br><br>
+  <div class="course-request-info-form">
+<h5>Get Course Package</h5>
+<p>We'll send you a detailed package containing course, project, and Educator details.</p>
+<form style="margin-top:4%;" (submit)="onInquiry()">
+  <table style=" Font-family:Linux Libertine, Georgia, Times, serif;">
+      <input class="form-control" type="text" [(ngModel)]="PopAcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+  <tr>
+    <td ><input  type="text"  [(ngModel)]="PopName" name="Name"  class="form-control"  placeholder="Name"></td>
+    <td ><input  type="text"   [(ngModel)]="PopEmailId" name="EmailId" style="margin-left:8%!important;" class="form-control" placeholder="EmailId" ></td>
+  </tr>
+  <tr>
+    <td><input  type="number"  [(ngModel)]="PopPhone" name="Phone"  class="form-control"  placeholder="Phone No"></td>
+    <td><input  type="Notes"  [(ngModel)]="PopNotes" name="Notes" style="margin-left:8%!important;margin-top:2%;" class="form-control" placeholder="Notes"></td>
+  </tr>
+  </table>
+</form>
+<p class="text-legal">By clicking "Get Course Package", you confirm that you accept our <a href="/terms-conditions" target="_blank" rel="noopener noreferrer"><u>Terms of Service</u></a>.</p>
+<div class="form-group">
+      <button type="submit" name="submit"  class="btn btn-primary hero-btn" style="background-color: #12ACCF!important;">Submit</button>
+</div>
+
+
+</div>
+
+
+  <!-- <div style="width:28%;background-color:white;margin-left:50%;">
+    <h1 style="color:#12ACCF; Font-family:Linux Libertine, Georgia, Times, serif;" align="center"> Inquiry </h1>
+    <form style="margin-top:4%;" (submit)="onInquiry()">
       <table style=" Font-family:Linux Libertine, Georgia, Times, serif;">
-          <input class="form-control" type="text" [(ngModel)]="AcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+          <input class="form-control" type="text" [(ngModel)]="PopAcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
       <tr>
-        <td ><input  type="text"  [(ngModel)]="Name" name="Name"  style="margin-left:6%!important;"   placeholder="Name"></td>
-        <td ><input  type="text"   [(ngModel)]="EmailId" name="EmailId" style="margin-left:8%!important;" placeholder="EmailId" ></td>
+        <td ><input  type="text"  [(ngModel)]="PopName" name="Name"  style="margin-left:6%!important;"   placeholder="Name"></td>
+        <td ><input  type="text"   [(ngModel)]="PopEmailId" name="EmailId" style="margin-left:8%!important;" placeholder="EmailId" ></td>
       </tr>
       <tr>
-        <td ><input  type="text"  [(ngModel)]="Phone" name="Phone"  style="margin-left:6%!important;margin-top:2%;"   placeholder="Phone No"></td>
-        <td ><input  type="Notes"  [(ngModel)]="Notes" name="Notes" style="margin-left:8%!important;margin-top:2%;" placeholder="Notes"></td>
-</tr>
-           <tr>
-
-          <td><button type="submit" name="submit"  style="background-color: #d43d2e;color:white; margin-left:6%;margin-top:3%;">Submit</button></td>
-         </tr>
-<br>
-      </table>
-
-
-    </form>
-</div>
+        <td><input  type="number"  [(ngModel)]="PopPhone" name="Phone"  style="margin-left:6%!important;margin-top:2%;"   placeholder="Phone No"></td>
+        <td><input  type="Notes"  [(ngModel)]="PopNotes" name="Notes" style="margin-left:8%!important;margin-top:2%;" placeholder="Notes"></td>
+      </tr>
+      <tr>
+          <td><button type="submit" name="submit"  style="background-color: #12ACCF;color:white; margin-left:6%;margin-top:3%;">Submit</button></td>
+      </tr>
+      <br>
+    </table>
+  </form>
+</div> -->
   </div>
+
 <div>
   <h2 style="text-align:center;">Academy Profile</h2>
 </div><br><br>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<div class="sidenav" >
+<div id="menu-center">
+  <ul>
+
+  <li><a href="CourseDetails#Overview" class="active"  style="margin-left:-18%">Overview</a></li>
+  <li><a href="CourseDetails#What You'll Learn">What You'll Learn</a></li>
+  <li><a href="CourseDetails#The Experience">The Experience</a></li>
+  <li><a href="CourseDetails#How You'll Learn">How You'll Learn</a></li>
+  <li>Learning Environment</li>
+  <li>Partners</li>
+  <li>Career Support</li>
+  <li>Payment Plans</li>
+  <li>Application</li>
+  <li>Upcoming Semesters</li>
+  <li>Location</li>
+  </ul>
+
+<div class="bs-sidebar__phone">
+<div class="bs-sidebar__phone__text">Connect with an advisor</div>
+<a class="bs-sidebar__phone__number" href="tel:+18009035159">+1 (800) 903-5159</a>
+</div>
+</div>
+</div>
+
+<div class="main"  style="margin-top:-27%!important" >
+<div class="remote-overview">
+<div class="remote-overview__column">
+<ul>
+<li class="bs-feature">
 <div>
+
+<strong class="bs-feature__title bs-feature__title--small" id="Overview">10 Weeks</strong>
+<p class="bs-feature__description">
+Deep learning with 400 hours of in-class instruction, project work and collaboration.
+</p>
+</div>
+</li>
+<li class="bs-feature">
+<div>
+<strong class="bs-feature__title bs-feature__title--small">Taught by Industry Leaders</strong>
+<p class="bs-feature__description">
+Learn from experts who bring their real-world experience to every class.
+</p>
+</div>
+</li>
+<li class="bs-feature">
+<div>
+<strong class="bs-feature__title bs-feature__title--small">Low Student-to-Teacher Ratio</strong>
+<p class="bs-feature__description">
+Smaller class sizes make for a more interactive, collaborative learning experience.
+</p>
+</div>
+</li>
+<li class="bs-feature">
+<div>
+<strong class="bs-feature__title bs-feature__title--small">Hands-on Projects</strong>
+<p class="bs-feature__description">
+Don't just sit in front of a lecturer; hands-on learning allows you to work on real projects that matter to you.
+</p>
+</div>
+</li>
+</ul>
+</div>
+
+
+<!-- sucess Team -->
+
+<div class="success-team-card" style="margin-top:2%!important;">
+
+<div class="success-team-card__head">
+<h3>Your BrainStation - Success Team</h3>
+</div>
+<div class="success-team-card__body">
+<div class="success-team-list">
+<div>
+
+<div class="success-team-list__text">
+<p>Program Manager</p>
+</div>
+</div>
+<div class="success-team-list__item">
+<div class="success-team-list__text">
+<p>Lead Educators</p>
+<p>Teaching Assistants</p>
+</div>
+</div>
+<div class="success-team-list__item">
+
+<div class="success-team-list__text">
+<p>Program Coordinator</p>
+<p>Career Coaches</p>
+</div>
+</div>
+</div>
+</div>
+<div class="success-team-card__footer">
+<p>If you have any questions about our success team</p>
+<button class="btn btn-primary" data-toggle="modal" data-target="#requestInfoModal" style="background-color:#12ACCF!important">Get In Touch</button>
+</div>
+</div>
+</div>
+<em>This Program is registered with the Private Training Institutions Branch (PTIB) of British Columbia.</em><br><br><br>
+
+
+
+<!-- part-2 -->
+<div>
+<div class="main1" >
+  <h2 class="heading heading--underline heading--blue" style="margin-left:3%!important" >What You'll Learn</h2><br>
+  <div class="overview-wrapper">
+<div class="overview-container ">
+<ul class="course-overview" style="position: relative; display: none;" data-visible="false">
+<li class="course-overview__item">
+<span class="course-overview__title">HTML5</span>
+<span class="course-overview__description">HTML training to help you master the internet’s foundational language.</span>
+</li>
+<li class="course-overview__item">
+<span class="course-overview__title">CSS3</span>
+<span class="course-overview__description">Use CSS3 to make your website standout by customizing your layout, appearance, and adding animations.</span>
+</li>
+<li class="course-overview__item">
+<span class="course-overview__title">Bootstrap</span>
+<span class="course-overview__description">Apply this modern front-end framework to easily create responsive sites on mobile, tablet and desktop.</span>
+</li>
+<li class="course-overview__item">
+<span class="course-overview__title">SASS &amp; BEM</span>
+<span class="course-overview__description">Learn industry best practices for styling websites with CSS tools and methodologies.</span>
+</li>
+<li class="course-overview__item">
+<span class="course-overview__title">JavaScript</span>
+<span class="course-overview__description">Learn to program with the language of the web, using the latest ECMAScript6 standard.</span>
+</li>
+<li class="course-overview__item">
+<span class="course-overview__title">JQuery</span>
+<span class="course-overview__description">Use one of the web’s most popular libraries, jQuery, to add interactivity, animations, and dynamic changes to your webpage.</span>
+</li>
+</ul>
+
+</div>
+
+<div class="overview-buttons " style="margin-right: 4%;">
+<button id="what-learn-prev" class="btn what-learn-btn">>
+
+</button>
+<button id="what-learn-next" class="btn what-learn-btn"><</button>
+</div>
+
+<!-- <button class="btn btn-primary request-info-modal-trigger" data-toggle="modal" data-target="#requestInfoModal" style="background-color:#12ACCF!important;margin-left:3%!important">Get Course Package</button> -->
+<div class="w3-container" >
+
+  <button (click)="inquiryPopUp()"  class="btn btn-primary request-info-modal-trigger" data-toggle="modal" data-target="#requestInfoModal" style="background-color:#12ACCF!important;margin-left:3%!important;margin-top:-12%!important;">Inquiry</button>
+  <div><br><br><br>
+  <div id="id01" class="w3-modal" *ngIf="POPUP">
+
+    <div class="w3-modal-content" style="width:50%!important;border-radius: 6px!important;" >
+
+      <header class="w3-container w3-teal"  style="background-color:#12ACCF!important">
+        <span (click)="inquiryPopUp()" class="w3-button w3-display-topright">&times;</span>
+        <h2>Inquiry</h2>
+      </header><br>
+      <div class="w3-container" >
+        <form (submit)="onInquiry()" style="float:left;">
+          <table>
+              <input type="text" [(ngModel)]="PopAcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+              <tr>
+
+                <td ><input  type="text"  [(ngModel)]="PopName" name="Name" style="margin-left:20%!important;" placeholder="Name"></td>
+              </tr>
+            <tr>
+
+              <td ><input  type="text"   [(ngModel)]="PopEmailId" name="EmailId" style="margin-left:20%!important;margin-top:6%"  placeholder="EmailId"></td>
+            </tr>
+            <tr>
+
+            <td ><input  type="number"  [(ngModel)]="PopPhone" name="Phone" style="margin-left:20%!important;margin-top:6%" placeholder="Phone No"></td>
+          </tr>
+            <tr>
+
+              <td ><input  type="Notes"  [(ngModel)]="PopNotes" name="Notes" style="margin-left:20%!important;margin-top:6%"  placeholder="Notes"></td>
+            </tr>
+            <tr>
+
+              <td><button type="submit" name="submit" class="btn btn-primary btn-block"  style="margin-top:6%;background-color:#12ACCF!important;margin-left:19%!important;">Submit</button></td>
+            </tr><br>
+          </table>
+        </form>
+
+      <p style="margin-left:50%!important;">
+        Pricing, detailed course syllabus and key course information<br>
+      Early access, offers &amp; updates from BrainStation, including new courses, workshops &amp; events<br>
+      Updates regarding networking and hiring opportunities<br></p>
+      </div>
+
+    </div>
+
+
+    </div>
+
+
+
+  </div>
+
+
+</div>
+</div>
+</div>
+
+
+<div class="main1" >
+<!--
+  <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-3 course-for-me"> -->
+  <div class="course-for-me__body"  style="width:43%!important;margin-top:2%!important;"   >
+  <h2 class="heading heading--blue heading--underline" id="What You'll Learn">The Experience</h2>
+  <p>BrainStation's full-time Web Development program is tailored to those looking to turn their idea into a startup, make a career switch into technology, or drive their business with digital. It's a challenging yet fun and engaging learning experience that emphasizes collaboration.</p>
+  <p>By the end of the 10 weeks, you'll have acquired the skills needed to become a Junior Web Developer, as well as a network of like-minded individuals and industry mentors; relationships you'll continue to develop beyond the classroom.</p>
+  <div class="w3-container" >
+
+    <button (click)="inquiryPopUp()"  class="btn btn-primary request-info-modal-trigger" data-toggle="modal" data-target="#requestInfoModal" style="background-color:#12ACCF!important;margin-left:-5%!important;font-size:16px!important;">Inquiry</button>
+    <div><br><br><br><br><br>
+    <div id="id01" class="w3-modal" *ngIf="POPUP" >
+
+      <div class="w3-modal-content" style="width:50%!important;border-radius: 6px!important;" >
+
+        <header class="w3-container w3-teal"  style="background-color:#12ACCF!important">
+          <span (click)="inquiryPopUp()" class="w3-button w3-display-topright">&times;</span>
+          <h2>Inquiry</h2>
+        </header><br>
+        <div class="w3-container" >
+          <form (submit)="onInquiry()" style="float:left;">
+            <table>
+                <input type="text" [(ngModel)]="PopAcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+                <tr>
+
+                  <td ><input  type="text"  [(ngModel)]="PopName" name="Name" style="margin-left:20%!important;" placeholder="Name"></td>
+                </tr>
+              <tr>
+
+                <td ><input  type="text"   [(ngModel)]="PopEmailId" name="EmailId" style="margin-left:20%!important;margin-top:6%"  placeholder="EmailId"></td>
+              </tr>
+              <tr>
+
+              <td ><input  type="number"  [(ngModel)]="PopPhone" name="Phone" style="margin-left:20%!important;margin-top:6%" placeholder="Phone No"></td>
+            </tr>
+              <tr>
+
+                <td ><input  type="Notes"  [(ngModel)]="PopNotes" name="Notes" style="margin-left:20%!important;margin-top:6%"  placeholder="Notes"></td>
+              </tr>
+              <tr>
+
+                <td><button type="submit" name="submit" class="btn btn-primary btn-block"  style="margin-top:6%;background-color:#12ACCF!important;margin-left:19%!important;">Submit</button></td>
+              </tr><br>
+            </table>
+          </form>
+
+        <p style="margin-left:50%!important;">
+          Pricing, detailed course syllabus and key course information<br>
+        Early access, offers &amp; updates from BrainStation, including new courses, workshops &amp; events<br>
+        Updates regarding networking and hiring opportunities<br></p>
+        </div>
+
+      </div>
+
+
+      </div>
+
+
+
+    </div>
+
+
+  </div>
+  <!-- </div> -->
+
+  <img src="../../assets/web-development-immersive.png" srcset="../../assets/web-development-immersive.png 1x,
+                       /Content/images/course/four-grid/web-development-immersive@2x.png 2x" width="540" height="540" class="course-for-me__image course-for-me__image--transparent">
+  </div><br><br>
+
+</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<div><br><br>
+  <div style="margin-left:16%!important;padding-top:29%!important"  >
+  <h1 style="color:#12ACCF;margin-left:16%!important;" id="The Experience">Academy Detail</h1>
+  <pre style="font-size:100%;margin-left:16%!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;;background-color:#ffffff!important;color: #2e3b4e!important;border:none!important">
+  AcademyName:                     {{ academy?.AcademyName }}
+  AcademyWebsite:                  {{ academy?.AcademyWebsite }}
+  AcademyLogo:                       {{ academy?.AcademyLogo }}
+  AcademyFounded:                  {{ academy?.AcademyFounded }}
+  Headquarters:                         {{ academy?.Headquarters }}
+  AcademyDiscription:                {{ academy?.AcademyDiscription }}
+  ZipCode:                                  {{ academy?.ZipCode }}
+  EmailId:                                    {{ academy?.EmailId }}
+</pre>
+
+
+<h1 style="color:#12ACCF; margin-left:16%!important;"  id="How You'll Learn">Course Detail</h1>
+<pre style="font-size:100%;Font:normal;margin-left:16%!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;background-color:#ffffff!important;border:none!important;">
+ Academy:                    {{cource?.AcademyId.AcademyName}}
+ ProgramType:               {{ cource?.ProgramType }}
+ ProgramDuration:          {{ cource?.ProgramDuration }}
+ ProgramName:              {{ cource?.ProgramName }}
+ ProgramDescription:      {{ cource?.ProgramDescription }}
+ ProgramSubject:           {{ cource?.ProgramSubject }}
+ ProgramLocation:          {{ cource?.ProgramLocationId?.Loc_name }}
+ Cost:                            {{ cource?.Cost }}
+ StartDate:                     {{ cource?.StartDate }}
+ Length:                          {{ cource?.Length }}
+ Classsize:                       {{ cource?.Classsize }}
+ Commitment:                  {{ cource?.Commitment }}
+</pre>
+
+<!-- <div class="w3-container" >
+
+  <button (click)="inquiryPopUp()"  class="btn btn-primary request-info-modal-trigger" data-toggle="modal" data-target="#requestInfoModal" style="background-color:#12ACCF!important;margin-left:16%!important;font-size:16px!important">Inquiry</button>
+  <div><br><br><br><br><br>
+  <div id="id01" class="w3-modal" *ngIf="POPUP" >
+
+    <div class="w3-modal-content" style="width:50%!important;border-radius: 6px!important;" >
+
+      <header class="w3-container w3-teal"  style="background-color:#12ACCF!important">
+        <span (click)="inquiryPopUp()" class="w3-button w3-display-topright">&times;</span>
+        <h2>Inquiry</h2>
+      </header><br>
+      <div class="w3-container" >
+        <form (submit)="onInquiry()" style="float:left;">
+          <table>
+              <input type="text" [(ngModel)]="PopAcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+              <tr>
+
+                <td ><input  type="text"  [(ngModel)]="PopName" name="Name" style="margin-left:20%!important;" placeholder="Name"></td>
+              </tr>
+            <tr>
+
+              <td ><input  type="text"   [(ngModel)]="PopEmailId" name="EmailId" style="margin-left:20%!important;margin-top:6%"  placeholder="EmailId"></td>
+            </tr>
+            <tr>
+
+            <td ><input  type="number"  [(ngModel)]="PopPhone" name="Phone" style="margin-left:20%!important;margin-top:6%" placeholder="Phone No"></td>
+          </tr>
+            <tr>
+
+              <td ><input  type="Notes"  [(ngModel)]="PopNotes" name="Notes" style="margin-left:20%!important;margin-top:6%"  placeholder="Notes"></td>
+            </tr>
+            <tr>
+
+              <td><button type="submit" name="submit" class="btn btn-primary btn-block"  style="margin-top:6%;background-color:#12ACCF!important;margin-left:19%!important;">Submit</button></td>
+            </tr><br>
+          </table>
+        </form>
+
+      <p style="margin-left:50%!important;">
+        Pricing, detailed course syllabus and key course information<br>
+      Early access, offers &amp; updates from BrainStation, including new courses, workshops &amp; events<br>
+      Updates regarding networking and hiring opportunities<br></p>
+      </div>
+
+    </div>
+
+
+    </div>
+
+
+
+  </div>
+
+
+</div> -->
+</div>
+
+  <footer id="main-footer" class="container-fluid" role="footer" >
+  <div class="row">
+  <div class="col-md-7 col-xs-offset-1 col-xs-10">
+  <h2>Join Our Community</h2>
+  <p class="email-text">Receive info about courses, workshops and events in your community.</p>
+  <form class="get-started__form" id="newsletter-subscribe-form" novalidate="novalidate">
+  <div class="input-group">
+  <input type="email" class="form-control" id="newsletterEmail" name="email" placeholder="Enter Your E-mail" aria-label="Enter Your E-mail" required="" data-msg="Please enter a valid email address." data-rule-email="true" style="width:31%!important">
+  <span class="input-group-btn" style="vertical-align:top">
+  <!-- <button type="submit"  style="margin-left:2%!important;padding-left: 21px;padding-right: 21px;  min-width: 0;">Submit</button> -->
+  </span>
+  </div>
+
+
+  </form>
+  <p class="phone">Questions? Connect with a Learning Advisor: +1 (800) 903-5159</p>
+
+  </div>
+  <div class="col-md-4 col-xs-10 col-xs-offset-1 col-md-offset-0">
+  <ul class="nav site-nav" >
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/careers">Careers</a></li>
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/about">About</a></li>
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/scholarships">Scholarships</a></li>
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/press">Press</a></li>
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/contact/">Contact</a></li>
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/terms-and-conditions">Terms &amp; Conditions</a></li>
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/faq">FAQ</a></li>
+  <li style="font-size: 13px!important;line-height: 1.69!important;letter-spacing: .2px!important;color: #fff!important;"><a href="/accessibility">Accessibility</a></li>
+  </ul>
+  </div>
+  <div class="col-xs-10 col-xs-offset-1">
+  <p class="legal">
+  All Content © BrainStation Inc. 2015-2018. "BRAINSTATION" and the BrainStation Logo are trademarks of BrainStation Inc. All Rights Reserved.
+  </p>
+  </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+<!-- <div>
 <div style="float:left; width:50%;">
    <h1 style="padding-left:5%;color:#d43d2e;">Academy Detail</h1><br>
    <pre style="padding-left:5%;font-size:100%;Font:normal;Font-family:Verdana, Geneva, sans-serif;background-color:#ffffff!important;border:none!important">
@@ -73,43 +528,41 @@
     StartDate:                     {{ cource?.StartDate }}<br>
     Length:                          {{ cource?.Length }}<br>
     Classsize:                       {{ cource?.Classsize }}<br>
-    Commitment:                  {{ cource?.Commitment }}<br>
-  <button type="button" name="submit" class="btn btn-primary" (click)="inquiry()" value="Inquiry" class="button button3">Inquiry</button>
-  <button type="button" class="btn btn-primary" (click)="inquiryPopUp()" value="Inquiry" class="button button3">Inquiry POPUP</button>
-</pre>
+    Commitment:                  {{ cource?.Commitment }}<br> -->
+  <!-- <button type="button" name="submit" class="btn btn-primary" (click)="inquiry()" value="Inquiry" class="button button3">Inquiry</button> -->
+  <!-- <button type="button" class="btn btn-primary" (click)="inquiryPopUp()" value="Inquiry" class="button button3">Inquiry</button> -->
 
-<div id="popUP" *ngIf="POPUP" style="margin-left:30%;margin-top:50%;width:500px;height:500px;">
+
+<!-- <div id="popUP" *ngIf="POPUP" style="margin-left:30%;margin-top:50%;width:500px;height:500px;">
   <button type="button" class="btn btn-default" (click)="inquiryPopUp()" id="close"><i class="fa fa-close" style="font-size:36px;color:black!important;"></i></button>
   <h1> Inquiry </h1><br>
-  <form>
+  <form (submit)="onInquiry()">
     <table>
-        <input class="form-control" type="text" [(ngModel)]="AcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
+        <input class="form-control" type="text" [(ngModel)]="PopAcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
       <tr>
         <td>Phone No</td>
-        <td ><input class="form-control ptxt" type="text"  [(ngModel)]="Phone" name="Phone" style="margin-left:20%!important;"></td>
+        <td ><input class="form-control ptxt" type="number"  [(ngModel)]="PopPhone" name="Phone" style="margin-left:20%!important;"></td>
       </tr><br>
       <tr>
         <td>EmailId</td>
-        <td ><input class="form-control ptxt" type="text"   [(ngModel)]="EmailId" name="EmailId" style="margin-left:20%!important;"></td>
+        <td ><input class="form-control ptxt" type="text"   [(ngModel)]="PopEmailId" name="EmailId" style="margin-left:20%!important;"></td>
       </tr><br>
       <tr>
         <td>Name</td>
-        <td ><input class="form-control ptxt" type="text"  [(ngModel)]="Name" name="Name" style="margin-left:20%!important;"></td>
+        <td ><input class="form-control ptxt" type="text"  [(ngModel)]="PopName" name="Name" style="margin-left:20%!important;"></td>
       </tr><br>
       <tr>
         <td>Notes</td>
-        <td ><input class="form-control ptxt" type="Notes"  [(ngModel)]="Notes" name="Notes" style="margin-left:20%!important;"></td>
+        <td ><input class="form-control ptxt" type="Notes"  [(ngModel)]="PopNotes" name="Notes" style="margin-left:20%!important;"></td>
       </tr><br>
       <tr>
         <td></td>
-<td><button type="submit" name="submit" class="btn btn-primary">Submit</button></td>
-</tr>
+        <td><button type="submit" name="submit" class="btn btn-primary">Submit</button></td>
+      </tr>
     </table>
-
-
   </form>
+</div> -->
+<!-- </pre> -->
 
 
-
-  </div>
-</div>
+<!-- </div> -->

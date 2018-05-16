@@ -1,0 +1,29 @@
+.navbar-nav {
+       display: -ms-flexbox;
+       display: flex;
+       -ms-flex-direction: row;
+       flex-direction: row;
+       padding-left: 0;
+       margin-bottom: 0;
+       list-style: none;
+   }
+   .navbar-default {
+    background-color: #337ab7;
+    color: white;
+  }
+  .glyphicon {
+      top: 4px;
+    }
+    li .curser{
+      color: white;
+    }
+    li{
+    color:white !important;
+    }
+    .navbar-default .navbar-nav>li>a {
+    color:white;
+    }
+
+    .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+      color: black;
+    }

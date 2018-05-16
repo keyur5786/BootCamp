@@ -14,9 +14,13 @@ export class CourceService {
     .map(res=>res.json());
   }
 
-  deletecource(id){
+  getMyCources(academyId){
+    return this.http.get('http://localhost:3000/api/MyCources/'+academyId)
+    .map(res=>res.json());
+  }
 
-    return this.http.delete('http://localhost:3000/api/Cources/'+id)
+  deletecource(id,UserId,UserName,UserType){
+    return this.http.delete('http://localhost:3000/api/Cources/'+id+"/"+UserId+"/"+UserName+"/"+UserType)
     .map(res=>res.json());
   }
 
@@ -34,8 +38,23 @@ updateCource(newCource){
    .map(res => res.json());
  }
 
- changeStatus(statusRecordId,statusId,academyid,createdBy){
-   return this.http.get('http://localhost:3000/api/changeStatus/'+statusRecordId+"/"+statusId+"/"+academyid+"/"+createdBy)
+ changeStatus(statusRecordId,statusId,academyid,createdBy,UserType,UserName){
+   console.log("From Service = CreatedBy "+createdBy);
+   return this.http.get('http://localhost:3000/api/changeStatus/'+statusRecordId+"/"+statusId+"/"+academyid+"/"+createdBy+"/"+UserType+"/"+UserName)
+   .map(res=>res.json());
+ }
+
+ activateCourse(courseObject){
+   let headers = new Headers();
+   headers.append('Content-Type','application/json');
+   return this.http.put('http://localhost:3000/api/activateCourse',courseObject,{headers:headers})
+   .map(res=>res.json());
+ }
+
+ deactivateCourse(courseObject){
+   let headers = new Headers();
+   headers.append('Content-Type','application/json');
+   return this.http.put('http://localhost:3000/api/deactivateCourse',courseObject,{headers:headers})
    .map(res=>res.json());
  }
 

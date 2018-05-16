@@ -23,6 +23,7 @@ export class AcademyCourseComponent implements OnInit {
   // Academy:Academy[]; // To fill out dropdown
   ProgramLocationId:any;
   ProgramLocation:any; // To fill out dropdown
+  LocationName:any;
 
   AcademyId:any;
   Academy:any; // To fill out academy in dropdown
@@ -39,9 +40,9 @@ export class AcademyCourseComponent implements OnInit {
   Classsize:string;
   Commitment:string;
 
-  CareerServices:any=false;
-  Financing:any=false;
-  Scholarship:any=false;
+  CareerServices:boolean=false;
+  Financing:boolean=false;
+  Scholarship:boolean=false;
 
   toggleForm:boolean=false;
   showCources:boolean=false;
@@ -56,12 +57,22 @@ export class AcademyCourseComponent implements OnInit {
     });
   }
 
+  getLocationName(event:Event){
+    let selectElementText = event.target['options']
+     [event.target['options'].selectedIndex].text;
+     this.LocationName = selectElementText;
+     console.log("From Load = "+this.LocationName);
+  }
+
   deletecource(id:any,program:any){
     if(!confirm("Are You Sure To Delete "+program+" ?")){
       return false;
     }
      var cources = this.cources;
-     this.CourceService.deletecource(id)
+     var UserId = localStorage.getItem("AcademyID");
+     var UserName = localStorage.getItem("LoggerName");
+     var UserType = "Academy";
+     this.CourceService.deletecource(id,UserId,UserName,UserType)
    .subscribe(data=>{
       if(data.n==1){
 
@@ -84,6 +95,10 @@ export class AcademyCourseComponent implements OnInit {
    }
 
 addCource(){
+  if(this.EndDate<this.StartDate){
+    this.flashMessage.show("EndDate Should Be Gratter Than StartDate !",{cssClass:'alert-danger',timeout:5000});
+    return false;
+  }
   const newCource = {
     AcademyId:this.AcademyId,
     ProgramType:this.ProgramType,
@@ -92,6 +107,7 @@ addCource(){
     ProgramDescription:this.ProgramDescription,
     ProgramSubject:this.ProgramSubject,
     ProgramLocationId:this.ProgramLocationId,
+    LocationName:this.LocationName,
     Cost:this.Cost,
     StartDate:this.StartDate,
     EndDate:this.EndDate,
@@ -101,7 +117,11 @@ addCource(){
     CareerServices:this.CareerServices,
     Financing:this.Financing,
     Scholarship:this.Scholarship,
-    CreatedBy:localStorage.getItem("AcademyID")
+    ByAcademy:true,
+    UserType:"Academy",
+    CreatedBy:localStorage.getItem("AcademyID"),
+    CreatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+    UserName:localStorage.getItem("LoggerName")
   }
   this.CourceService.addCource(newCource).subscribe(result=>{
     if(result.success){
@@ -121,7 +141,11 @@ addCource(){
 }
 
 editCorce(form){
-  let newCource:Cource={
+  if(form.value.EndDate<form.value.StartDate){
+    this.flashMessage.show("EndDate Should Be Gratter Than StartDate !",{cssClass:'alert-danger',timeout:5000});
+    return false;
+  }
+  const newCource={
     _id: this.cource._id,
   AcademyId:form.value.AcademyId,
   ProgramType: form.value.ProgramType,
@@ -130,6 +154,7 @@ editCorce(form){
   ProgramDescription: form.value.ProgramDescription,
   ProgramSubject: form.value.ProgramSubject,
   ProgramLocationId: form.value.ProgramLocationId,
+  LocationName:this.LocationName,
   Cost: form.value.Cost,
   StartDate: form.value.StartDate,
   EndDate:form.value.EndDate,
@@ -139,8 +164,10 @@ editCorce(form){
   CareerServices: form.value.CareerServices,
   Financing: form.value.Financing,
   Scholarship: form.value.Scholarship,
-  UpdatedOn:moment().format('DD/MM/YYYY HH:MM:SS'),
-  UpdatedBy:localStorage.getItem("AcademyID")
+  UpdatedOn:moment().format("DD-MM-YYYY HH:mm:ss"),
+  UpdatedBy:localStorage.getItem("AcademyID"),
+  UserType:"Academy",
+  UserName:localStorage.getItem("LoggerName")
   }
   this.CourceService.updateCource(newCource)
   .subscribe(result=>{
@@ -161,7 +188,14 @@ editCorce(form){
   }
 
 showEditForm(cource){
-  // console.log(JSON.stringify(cource.ProgramLocationId._id));
+  console.log("From Edit = "+JSON.stringify(this.ProgramLocation));
+  for(var i=0;i<this.ProgramLocation.length;i++){
+    if(this.ProgramLocation[i]._id==cource.ProgramLocationId._id){
+      this.LocationName = this.ProgramLocation[i].Loc_name;
+      break;
+    }
+  }
+  // console.log("After Edit = "+JSON.stringify(this.LocationName));
   this.AcademyId = cource.AcademyId._id;
   this.ProgramLocationId = cource.ProgramLocationId._id;
   this.ProgramType = cource.ProgramType;
@@ -170,12 +204,33 @@ showEditForm(cource){
   this.toggleForm = true;
   }
 
+  changeStatus(statusRecordId,statusId,programname,academyid){
+    if(statusId==1){
+      if(!confirm("Are You Sure To Draft "+programname)){
+        return false;
+      }
+    }
+    else if(statusId==2)
+    {
+      if(!confirm("Are You Sure To Publish "+programname)){
+        return false;
+      }
+    }
+    var createdBy = localStorage.getItem("AcademyID");
+    var UserType = "Academy";
+    var UserName = localStorage.getItem("LoggerName");
+    this.CourceService.changeStatus(statusRecordId,statusId,academyid,createdBy,UserType,UserName)
+    .subscribe(result=>{
+      this.flashMessage.show(result,{cssClass:'alert-success',timeout:3000});
+    });
+  }
+
   ngOnInit() {
     var checkLogin = localStorage.getItem("AcademyID");
     if(checkLogin==null){
       this.router.navigate(['login']);
     }
-    this.CourceService.getCources()
+    this.CourceService.getMyCources(checkLogin)
     .subscribe(cources=>{
       console.log(cources);
       this.cources = cources[0];
@@ -198,5 +253,38 @@ showEditForm(cource){
     );
 }
 
+activateCourse(courseId,courseName){
+  if(!confirm("Are You Sure To Activate "+courseName+" ?")){
+    return false;
+  }
+  const courseObject = {
+    courseId: courseId,
+    UpdatedBy:localStorage.getItem("AcademyID"),
+    UserName:localStorage.getItem("LoggerName"),
+    UserType:"Academy"
+  };
+  this.CourceService.activateCourse(courseObject)
+  .subscribe(couse=>{
+    this.flashMessage.show(couse.success,{cssClass:'alert-success',timeout:3000});
+    this.ngOnInit();
+  });
+}
+
+deactivateCourse(courseId,couseName){
+  if(!confirm("Are You Sure To Dectivate "+couseName+" ?")){
+    return false;
+  }
+  const courseObject = {
+    courseId: courseId,
+    UpdatedBy:localStorage.getItem("AcademyID"),
+    UserName:localStorage.getItem("LoggerName"),
+    UserType:"Academy"
+  };
+  this.CourceService.deactivateCourse(courseObject)
+  .subscribe(couse=>{
+    this.flashMessage.show(couse.success,{cssClass:'alert-success',timeout:3000});
+    this.ngOnInit();
+  });
+}
 
 }

@@ -27,10 +27,14 @@ console.log(file);
   return this.http.post('http://localhost:3000/api/imageupload/',file)
     .map(res => res.json())
 }
+uploadMediaFileE(file): Observable<any> {
+console.log(file);
+  return this.http.post('http://localhost:3000/api/imageuploadE/',file)
+    .map(res => res.json())
+}
 
-
-deleteAcademy(id){
-  return this.http.delete('http://localhost:3000/api/academy/'+id)
+deleteAcademy(id,UserId,UserName){
+  return this.http.delete('http://localhost:3000/api/academy/'+id+"/"+UserId+"/"+UserName)
   .map(res=>res.json());
 }
 
@@ -39,6 +43,20 @@ updateAcademy(newAcademy){
    headers.append('Content-Type','application/json');
    return this.http.put('http://localhost:3000/api/academy/'+newAcademy._id,newAcademy,{headers:headers})
    .map(res => res.json());
+ }
+
+ activateAcademy(academyObject){
+   let headers = new Headers();
+   headers.append('Content-Type','application/json');
+   return this.http.put('http://localhost:3000/api/activateAcademy',academyObject,{headers:headers})
+   .map(res=>res.json());
+ }
+
+ deactivateAcademy(academyObject){
+   let headers = new Headers();
+   headers.append('Content-Type','application/json');
+   return this.http.put('http://localhost:3000/api/deactivateAcademy',academyObject,{headers:headers})
+   .map(res=>res.json());
  }
 
 }

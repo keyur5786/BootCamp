@@ -14,4 +14,19 @@ export class InquiryService {
   .map(res=>res.json());
 }
 
+getInquiries(){
+  return this.http.get('http://localhost:3000/api/InquiryList')
+  .map(res=>res.json());
+}
+
+getInquiries1(academyID){
+  return this.http.get('http://localhost:3000/api/InquiryList1/'+academyID)
+  .map(res=>res.json());
+}
+
+getActivity(){
+  return this.http.get('http://localhost:3000/api/Getactivity/')
+  .map(res=>res.json());
+}
+
 }

@@ -19,40 +19,39 @@
   </nav>
 
   <div class="col-md-9 container text-center">
-  <div style="position:fixed; top:20px;"><flash-messages></flash-messages></div>
+  <div style="position:fixed; top:20px;z-index:999;"><flash-messages></flash-messages></div>
   <h3 align="center" style="padding-top:10px;"> Inquiry</h3>
-<form (submit)="onInquiry()">
+<form (submit)="onInquiry()" align="center">
 <!-- <form (submit) = "addUser()" -->
-  <div class="form-group" class="fmargin" align="center">
-    <div class="col-xs-3">
+
+
     <!-- <label>AcademyId</label> -->
     <input class="form-control" type="text" [(ngModel)]="AcademyId" name="AcademyId" style="margin-left: 65px;" hidden>
-  </div>
 
-<div class="col-xs-3">
+<br/>
 <label>Phone No</label>
-<input class="form-control" type="text"  [(ngModel)]="Phone" name="Phone">
-</div>
+<input  type="text"  [(ngModel)]="Phone" name="Phone">
 
-<div class="col-xs-3">
+<br/>
 <label style="margin-right: 16px;">EmailId</label>
-<input class="form-control ptxt" type="text"   [(ngModel)]="EmailId" name="EmailId">
-</div>
+<input class="" type="text"   [(ngModel)]="EmailId" name="EmailId">
 
-<div class="col-xs-3">
+<br/>
+
 <label style="margin-right: 26px;">Name</label>
-<input class="form-control ptxt" type="text"  [(ngModel)]="Name" name="Name">
-</div>
+<input  type="text"  [(ngModel)]="Name" name="Name">
 
-<div class="col-xs-3">
+<br/>
+
 <label style="margin-right: 25px;">Notes</label>
-<input class="form-control ptxt" type="Notes"  [(ngModel)]="Notes" name="Notes">
-</div>
+<input  type="Notes"  [(ngModel)]="Notes" name="Notes">
+<br/>
 
-  <br>
+  <br/>
   <div class="text-center">
   <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+  <button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;">Clear</button>
 </div>
-</div>
+
 </form>
 </div>

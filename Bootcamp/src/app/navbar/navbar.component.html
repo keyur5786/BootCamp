@@ -14,12 +14,14 @@ a{color: #817977!important;} */
       <a class="navbar-brand" href="#">BootCamp</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="/user"> User </a></li>
-      <li><a href="/cource"> Course </a></li>
-      <li><a href="/academy"> Academy </a></li>
+      <li class="active"><a href="/adminHome">Home</a></li>
+      <li *ngIf="userView==true"><a href="/user"> User </a></li>
+      <li *ngIf="couseView==true"><a href="/course"> Course </a></li>
+      <li *ngIf="academyView==true"><a href="/academy"> Academy </a></li>
      <!-- <li><a href="/uploadFile"> Upload-Test </a></li> -->
-      <li><a href="/location"> Location </a></li>
+      <li *ngIf="locatonView==true"><a href="/location"> Location </a></li>
+      <li><a href="/inquiryList" *ngIf="inquiryView==true"> Inquiries </a></li>
+    <li><a href="/adminactivity" *ngIf="activityLog==true">ActivityLog</a></li>
       <!-- <li><a href="/program-status"> Program Status </a></li> -->
       <!-- <li><a href="/imageupload"> ImageUpload </a></li> -->
     </ul>

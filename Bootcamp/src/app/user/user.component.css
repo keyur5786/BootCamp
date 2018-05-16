@@ -1,3 +1,28 @@
 body{
   background-color: gray;
 }
+.table th{
+  padding:0px;
+  text-align: center;
+
+  color:white;
+  border-color: black;
+}
+
+td{
+    text-align: center;
+    padding: 0px;
+}
+body{
+  background-color: #ddd!important;
+}
+.un{
+margin-left: 7px;
+}
+
+.tbtn{
+  padding: 0px;
+border-radius: 0px;
+
+}
+.btn{border-radius: 0px;background-color: #12ACCF!important;}

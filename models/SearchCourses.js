@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const moment = require("moment");
 const CourceSchema = mongoose.Schema({
   ProgramType : {
 		type: Number,
@@ -74,12 +74,12 @@ const CourceSchema = mongoose.Schema({
 
   CreatedOn : {
     type: String,
-    default: Date.now()
+    default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
   UpdatedOn : {
     type: String,
-    default: Date.now()
+    default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
   CreatedIp : {

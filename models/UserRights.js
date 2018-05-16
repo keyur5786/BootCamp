@@ -3,7 +3,7 @@ const moment = require("moment");
 const UserRightsSchema = mongoose.Schema({
 
   UserId : {
-    type: Number,
+    type: String,
   },
 
   FormName : {
@@ -17,30 +17,30 @@ const UserRightsSchema = mongoose.Schema({
   Add : {
     type: Boolean,
 
-  }
+  },
 
   Edit : {
     type: Boolean,
 
-  }
+  },
 
   Delete : {
     type: Boolean,
 
-  }
+  },
 
   View : {
     type: Boolean,
 
-  }
+  },
   CreatedBy : {
-    type: Number,
+    type: String,
 
   },
 
   CreatedOn : {
     type: String,
-    default: moment().format('DD/MM/YYYY HH:MM:SS')
+    default: moment().format("DD-MM-YYYY HH:mm:ss")
   },
 
   CreatedIp : {
@@ -49,7 +49,7 @@ const UserRightsSchema = mongoose.Schema({
   },
 
   UpdatedBy : {
-    type: Number,
+    type: String,
 
   },
 
@@ -59,13 +59,13 @@ const UserRightsSchema = mongoose.Schema({
   },
 
   UpdatedIp : {
-    type: Number,
+    type: String,
 
   },
 
   Active : {
     type: Boolean,
-
+    default: true
   }
 });
 

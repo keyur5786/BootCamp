@@ -11,4 +11,20 @@
     max-width: 30%!important;
   padding-bottom: 25px!important;
     }
-  /* .ptxt{margin-left: 12px;} */
+    .btn{border-radius: 0px;}
+    /* .navbar-nav {
+           display: -ms-flexbox;
+           display: flex;
+           -ms-flex-direction: row;
+           flex-direction: row;
+           padding-left: 0;
+           margin-bottom: 0;
+           list-style: none;
+       }
+        .navbar-default {
+         background-color: #bfcaca!important;
+       } */
+       .btn-primary {
+           color: #fff;
+           border-color: #007bff12;
+       }
