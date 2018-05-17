@@ -3,16 +3,17 @@ import {Http,Headers,Response} from '@angular/http';
 import {Bootcamp} from './bootcamp';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
+import {environment} from '../environments/environment';
 
 @Injectable()
 export class BootcampService {
- // endPoint: string;
+  public host:string=environment.host;
   constructor(private http:Http) {
   // this.endPoint = "http://localhost:3000/api/Locates";
  }
 
  getData(){
-   return this.http.get('http://localhost:3000/api/cources')
+   return this.http.get(this.host+'/api/cources')
    .map(res=>res.json());
  }
 

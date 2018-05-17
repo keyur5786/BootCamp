@@ -1,5 +1,6 @@
 // STEP - 1
 //importing modules
+require('dotenv').config();
 var express = require("express");
 var mongoose = require("mongoose");
 var bodyparser = require("body-parser");
@@ -36,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 // headers and content type
 app.use(function(req, res, next) { //allow cross origin requests
         res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
-        res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.header("Access-Control-Allow-Origin",process.env.HOST);
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         res.header("Access-Control-Allow-Credentials", true);
         next();
@@ -83,7 +84,7 @@ app.use('/api',route);
 mongoose.connect('mongodb://localhost:27017/bootcamp');
 
 mongoose.connection.on("connected",()=>{
-console.log("MongoDB Connection Done On PORT 27017");
+console.log("MongoDB Connection Done On PORT "+process.env.HOST);
 });
 
 mongoose.connection.on("error",(err)=>{
