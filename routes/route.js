@@ -836,7 +836,7 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
       // });
       return res.json("Username & Password is wrong!");
     }else if(user[0].Active==false){
-      return res.json("You Are Deactivated, To Be Active Met To Admin !");
+      return res.json("You Are Deactivated, To Be Active Meet To Admin !");
     }
     else{
       console.log("User From Route = "+user[0].Active);
@@ -882,7 +882,7 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
         return res.json("Email & Password is wrong!");
       }
       else if(academy[0].Active==false){
-        return res.json("You Are Deactivated, To Be Active Met To Admin !");
+        return res.json("You Are Deactivated, To Be Active Meet To Admin !");
       }
       else{
         let newActivityLog = new ActivityLog({

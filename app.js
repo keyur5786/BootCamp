@@ -30,6 +30,7 @@ console.log("Server Started At PORT : "+port);
 
 // Static file path which run on front-end angular project
 app.use(express.static(path.join(__dirname,'public'))); //__dirname returns current directory name
+app.use(express.static(path.join(__dirname, 'dist')));
 
 
 // headers and content type

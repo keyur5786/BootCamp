@@ -64,6 +64,9 @@ export class AcademyComponent implements OnInit {
             }
             this.AcademyService.getAcademy()
             .subscribe(Academy=>{
+              for(var i=0;i<Academy.length;i++){
+                Academy[i]["TempLogo"] = "../../assets/"+Academy[i].AcademyLogo;
+              }
               this.academies = Academy;
               this.AcademyName="";
               this.AcademyWebsite="";
