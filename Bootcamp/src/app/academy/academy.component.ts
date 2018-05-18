@@ -6,6 +6,7 @@ import {FlashMessagesService} from 'angular2-flash-messages';
 import {FormControl} from '@angular/forms';
 import {Router} from '@angular/router';
 import {LoginServiceService} from '../login-service.service';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-academy',
   templateUrl: './academy.component.html',
@@ -29,12 +30,13 @@ export class AcademyComponent implements OnInit {
   logoPath:any;
   // UpdatedOn:any;
  toggleForm:boolean=false;
+ imgPathForGrid=[];
 
  UserRights:any;
  academyAdd:boolean=false;
  academyEdit:boolean=false;
  academyDelete:boolean=false;
-  constructor(private LoginServiceService:LoginServiceService,private AcademyService:AcademyService,private flashMessage:FlashMessagesService,private router:Router) { }
+  constructor(public sanitizer: DomSanitizer,private LoginServiceService:LoginServiceService,private AcademyService:AcademyService,private flashMessage:FlashMessagesService,private router:Router) { }
 
   ngOnInit() {
     var checkLogin = localStorage.getItem("LoggerId");
@@ -69,6 +71,7 @@ export class AcademyComponent implements OnInit {
               // }
               console.log(JSON.stringify(Academy));
               this.academies = Academy;
+              // this.imgPathForGrid=Academy[1];
               this.AcademyName="";
               this.AcademyWebsite="";
               this.AcademyLogo="";

@@ -12,8 +12,8 @@ localStorage = new LocalStorage('./scratch');
 const storage = multer.diskStorage({
     // set uploads folder
     destination: (req, file, cb) => {
-        // cb(null, './Bootcamp/src/assets/');
-        cb(null, './uploads');
+         cb(null, './Bootcamp/src/assets/');
+        //cb(null, './uploads');
     },
     // set default filename
     filename: (req, file, cb) => {
@@ -103,7 +103,7 @@ router.get('/GetRightsList',(req,res,next)=>{
     {FormName:'ActivityLog',Add:false,Edit:false,Delete:false,View:false},
     {FormName:'Inquiries',Add:false,Edit:false,Delete:false,View:false}
   );
-  res.json(rights);
+  res.json(rights); 
 });
 
 router.get('/GetRightsListByUserId/:userId',(req,res,next)=>{
@@ -305,11 +305,14 @@ router.get('/academies',(req,res,next)=>{
   Academy.find()
   .sort({CreatedOn:-1})
   .then(Academy=>{
+    // var Data=[];
+    // var img=[];
     // for(var i=0;i<Academy.length;i++){
     //   var imgpath = path.join(__dirname,'../uploads')+'/'+Academy[i].AcademyLogo;
-    //   Academy[i].imgPath= imgpath;
-    //   console.log(Academy[i]);
+    //   img[i] = imgpath;
     // }
+    // Data.push(Academy);
+    // Data.push(img);
     res.json(Academy);
   })
   .catch(err=>{
@@ -518,7 +521,7 @@ router.get('/cources',(req,res,next)=>{
   .then(cource=>{
     data.push(cource);
     // Get Data From Second Table: Academy
-    Academy.find({Active:true})
+    Academy.find({Active:true,AcademyName:{$ne:null}})
     .then(academy=>{
       data.push(academy);
       // Get Data From 3rd Table location
