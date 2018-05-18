@@ -48,19 +48,20 @@ export class AcademyLoginComponent implements OnInit {
           localStorage.setItem('AcademyID', data[0]._id);
           localStorage.setItem('LoggerName',this.Email);
           if(data[0].isVerify==false){
-            var otp=Math.floor((Math.random() * 9999) + 1000);
-            // sessionStorage.setItem('OTP',otp.toString());
-            this.AcademyLoginService.sendOtp(data[0].EmailId,otp).subscribe(data1=>{
-              if(data1.success){
-                this.tempCode=otp.toString();
-                this.tempEmail=data[0].EmailId;
-                this.otpPopUp=true;
-                 //this.flashMessage.show("login sucessfully!!!",{cssClass : 'alert-success',timeout:5000});
-                 //this.router.navigate(['login']);
-              }else{
-                this.flashMessage.show(data1,{cssClass : 'alert-danger',timeout:5000});
-              }
-            });
+            // var otp=Math.floor((Math.random() * 9999) + 1000);
+            // // sessionStorage.setItem('OTP',otp.toString());
+            // this.AcademyLoginService.sendOtp(data[0].EmailId,otp).subscribe(data1=>{
+            //   if(data1.success){
+            //     this.tempCode=otp.toString();
+            //     this.tempEmail=data[0].EmailId;
+            //     this.otpPopUp=true;
+            //      //this.flashMessage.show("login sucessfully!!!",{cssClass : 'alert-success',timeout:5000});
+            //      //this.router.navigate(['login']);
+            //   }else{
+            //     this.flashMessage.show(data1,{cssClass : 'alert-danger',timeout:5000});
+            //   }
+            // });
+            this.router.navigate(['academyRegister']);
           }else{
             this.router.navigate(['academyRegister']);
           }
