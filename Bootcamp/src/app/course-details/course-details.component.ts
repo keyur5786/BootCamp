@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import {OnInit} from '@angular/core/src/metadata/lifecycle_hooks';
+// import * as $ from 'jquery';
 import { ActivatedRoute, Router } from '@angular/router';
 import {CourseDetailsService} from '../course-details.service';
 import {InquiryService} from '../inquiry.service';
 import {Course} from '../CourseDetails';
 import {Academy} from '../CourseDetails';
 import {FlashMessagesService} from 'angular2-flash-messages';
-import * as $ from 'jquery';
+
 // declare var jquery:any;
 // declare var $ :any;
 
@@ -16,6 +18,7 @@ import * as $ from 'jquery';
     providers: [CourseDetailsService,FlashMessagesService,InquiryService]
 })
 export class CourseDetailsComponent implements OnInit {
+
 
   constructor(private InquiryService:InquiryService,private CourseDetailsService:CourseDetailsService,private route: ActivatedRoute,private router: Router,private flashMessage:FlashMessagesService) { }
 
@@ -33,6 +36,9 @@ export class CourseDetailsComponent implements OnInit {
   PopName:any;
   PopNotes:any;
   ngOnInit() {
+    // jQuery('button').click(function(){
+    //   alert("Hi");
+    // });
 
     // this.route
     //     .queryParams
@@ -111,4 +117,43 @@ inquiryPopUp(){
   this.POPUP = !this.POPUP;
 }
 
+// $(document).ready(function () {
+//     $(document).on("scroll", onScroll);
+//
+//     //smoothscroll
+//     $('a[href^="#"]').on('click', function (e) {
+//         e.preventDefault();
+//         $(document).off("scroll");
+//
+//         $('a').each(function () {
+//             $(this).removeClass('active');
+//         })
+//         $(this).addClass('active');
+//
+//         var target = this.hash,
+//             menu = target;
+//         $target = $(target);
+//         $('html, body').stop().animate({
+//             'scrollTop': $target.offset().top+2
+//         }, 500, 'swing', function () {
+//             window.location.hash = target;
+//             $(document).on("scroll", onScroll);
+//         });
+//     });
+// });
+//
+// function onScroll(event){
+//     var scrollPos = $(document).scrollTop();
+//     $('#menu-center a').each(function () {
+//         var currLink = $(this);
+//         var refElement = $(currLink.attr("href"));
+//         if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
+//             $('#menu-center ul li a').removeClass("active");
+//             currLink.addClass("active");
+//         }
+//         else{
+//             currLink.removeClass("active");
+//         }
+//     });
+// }
 }

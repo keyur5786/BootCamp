@@ -16,4 +16,13 @@ public host:string=environment.host;
     .map(res=>res.json());
   }
 
+sendOtp(email,otp){
+  return this.http.get(this.host+'/api/otpverify/'+email+'/'+otp)
+  .map(res=>res.json());
+}
+
+updateVerification(email){
+  return this.http.get(this.host+'/api/verifyUpdate/'+email)
+  .map(res=>res.json());
+}
 }

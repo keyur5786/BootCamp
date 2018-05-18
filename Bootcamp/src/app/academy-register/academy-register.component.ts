@@ -88,6 +88,7 @@ export class AcademyRegisterComponent implements OnInit {
        this.RegisterService.registerAcademy(Academy)
        .subscribe(result=>{
          if(result.success){
+           localStorage.setItem('LoggerName',result.academyName);
            this.flashMessage.show(result.success,{cssClass:'alert-success',timeout:3000});
            this.router.navigate(['academyHome']);
            // this.ngOnInit();

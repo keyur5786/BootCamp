@@ -21,21 +21,21 @@ border-radius: 0px;
 <div class="container">
   <div style="position:fixed; top:100px; right:20px;z-index:999;"> <flash-messages></flash-messages> </div>
   <form (submit) = "addLocate()" *ngIf="!toggleForm">
-      <h2 class="page-header" style="text-align:center;padding-top: 35px;">Location</h2>
+      <h2  style="text-align:center;padding-top: 50px;" id="f3">Location</h2>
       <br/>
       <div class="text-center">
-               <label>Location Name</label>
+               <label id="f1">Location Name</label>
                <input type="text" [(ngModel)]="Loc_name" name="Loc_name" maxlength="50">
       </div>
 <br/>
       <div class="text-center">
-          <button type="submit" name="submit" class="btn btn-primary" style="width: 70px;" value="Save" *ngIf="locationAdd">Save</button>
-<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;">Clear</button>
+          <button type="submit" name="submit" class="btn btn-primary" style="width: 70px;" value="Save" *ngIf="locationAdd" id="f2">Save</button>
+<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;" id="f2">Clear</button>
       </div>
  </form>
 
  <form #editfrm="ngForm" (ngSubmit)="editLocate(editfrm)" *ngIf="toggleForm" align="center">
- <h2 class="page-header" style="text-align:center;padding-top:35px;"> Edit Location</h2>
+ <h2  style="text-align:center;padding-top:35px;"> Edit Location</h2>
  <br/>
  <div class="text-center">
           <label>Location Name</label>
@@ -49,7 +49,7 @@ border-radius: 0px;
 </form>
 </div>
 <div class="col-md-12">
-  <h2 class="page-header" style="text-align:center;"> Location List </h2>
+  <h2 style="text-align:center;" id="f3"> Location List </h2>
   <div style="float:right;padding-bottom:5px;">
    <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Search Here"/>
     <!-- <button (click)="GoForSearch()" ><b><i class="fa fa-search"></i>Search</b></button> -->
@@ -57,12 +57,12 @@ border-radius: 0px;
 <!-- end search bar   -->
 <br/>
 <br/>
-  <table class="table table-bordered">
+  <table class="table table-bordered" style="border:1px solid black!important">
     <thead>
       <tr style="background-color: #12ACCF!important;">
-        <th> Date Time </th>
-        <th>Location Name</th>
-        <th>Action</th>
+        <th id="f2"> Date Time </th>
+        <th id="f2">Location Name</th>
+        <th id="f2"s>Action</th>
       </tr>
     </thead>
     <tbody>

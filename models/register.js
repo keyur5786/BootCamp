@@ -18,8 +18,7 @@ const RegisterSchema = mongoose.Schema({
 		required: true
 	},
 
-
-  CreatedBy : {
+	CreatedBy : {
     type: Number,
 
   },

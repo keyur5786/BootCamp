@@ -17,5 +17,6 @@ export class Academy{
   UpdatedIp?:string;
   UpdatedOn?:any;
   Active?:boolean;
-
+  Auth_code?:string;
+	isVerify ?:boolean;
 }

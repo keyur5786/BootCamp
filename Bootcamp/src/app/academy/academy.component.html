@@ -2,36 +2,36 @@
 <div class="container">
 <div style="position:fixed; top:100px; right:20px;z-index:999;"> <flash-messages></flash-messages> </div>
   <form (submit) = "addAcademy()" *ngIf="!toggleForm" name="academyForm" method="post" enctype="multipart/form-data">
-    <h2 class="page-header" style="text-align:center;padding-top:35px;font-size: 24px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;color: #696e7c!important">Academy</h2>
+    <h2  style="text-align:center;padding-top:50px;font-size: 34px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;color: #696e7c!important">Academy</h2>
     <br/>
   <div class="row">
     <div class="col-sm-4">
-      <label style=" color: #696e7c!important;font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">Academy Name</label>
+      <label id="f1">Academy Name</label>
 
-       <input type="text" [(ngModel)]="AcademyName" name="AcademyName" class="an">
+       <input type="text" [(ngModel)]="AcademyName" name="AcademyName" class="an" style="margin-bottom:3%!important;">
     </div>
     <div class="col-sm-4">
-      <label  style="color: #696e7c!important;font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">AcademyWebsite</label>
+      <label id="f1">AcademyWebsite</label>
        <input type="url" [(ngModel)]="AcademyWebsite" name="AcademyWebsite" class="web" >
     </div>
     <div class="col-sm-4">
-      <label  style="color: #696e7c!important; font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">EmailId</label>
+      <label  id="f1">EmailId</label>
       <input type="text" [(ngModel)]="EmailId" name="EmailId" class="mail">
     </div>
 
   </div>
   <div class="row">
     <div class="col-sm-4">
-    <label  style="color: #696e7c!important; font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">AcademyDiscription</label>
-    <textarea name="AcademyDiscription" rows="1" [(ngModel)]="AcademyDiscription" class="desc" ></textarea>
+    <label  id="f1">AcademyDiscription</label>
+    <textarea name="AcademyDiscription" rows="1" [(ngModel)]="AcademyDiscription" class="desc"  style="margin-bottom:3%!important;" ></textarea>
     </div>
     <div class="col-sm-4">
-      <label  style=" color: #696e7c!important;font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">ZipCode</label>
-      <input type="text" [(ngModel)]="ZipCode" name="ZipCode" class="zip" >
+      <label  id="f1">ZipCode</label>
+      <input type="text" [(ngModel)]="ZipCode" name="ZipCode" class="zip"  style="margin-bottom:3%!important;" >
     </div>
     <div class="col-sm-4">
-      <label  style="color: #696e7c!important; font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">Password</label>
-      <input type="password" [(ngModel)]="Password" name="Password" class="psw">
+      <label id="f1">Password</label>
+      <input type="password" [(ngModel)]="Password" name="Password" class="psw"  style="margin-bottom:3%!important;">
     </div>
 
   </div>
@@ -48,14 +48,13 @@
         <label  style=" color: #696e7c!important;font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">AcademyFounded</label>
         <input type="text" [(ngModel)]="AcademyFounded" name="AcademyFounded" class="af">
     </div>
-  </div>
-  <div class="row">
     <div class="col-sm-4">
-      <label  style="color: #696e7c!important; font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">AcademyLogo</label>
+      <label id="f1">AcademyLogo</label>
       <!-- <input type="text" [(ngModel)]="AcademyLogo" name="AcademyLogo" class="logo"> -->
       <input name="file" id="file" type="file" (change)="fileChange($event)" />
     </div>
   </div>
+
 <div class="col-md-12 text-center">
   <button type="submit" name="submit" style="width:70px; font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;" class="btn btn-primary" value="Save" *ngIf="academyAdd">Save</button>
 <button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px; font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">Clear</button>
@@ -142,12 +141,12 @@
 </div>
 
 <div class="col-md-12">
-  <h2 class="page-header" style="text-align:center;;font-size: 24px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important; color: #696e7c!important;">Academy List</h2>
+  <h2  id="f3" style="text-align:center">Academy List</h2>
   <div style="float:right;padding-bottom:5px;">
    <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Search Here"/>
     <!-- <button (click)="GoForSearch()" ><b><i class="fa fa-search"></i>Search</b></button> -->
   </div>
-  <table class="table table-bordered">
+  <table class="table table-bordered" style="border:1px solid black!important">
     <thead>
 
       <tr style="background-color: #12ACCF!important;">
@@ -170,7 +169,9 @@
         <td>{{ data.CreatedOn }}</td>
         <td>{{ data.AcademyName }}</td>
         <td>{{ data.AcademyWebsite }}</td>
-        <td><img src="../../assets/{{data.AcademyLogo}}" height="50px" width="50px" alt="Loading...">
+        <!-- <td><img src="../../../../uploads/{{data.AcademyLogo}}" height="50px" width="50px" alt="Loading...">
+        </td> -->
+        <td><img src="{{'uploads/' + data.AcademyLogo}}" height="50px" width="50px" alt="Loading...">
         </td>
         <!-- <td>{{ data.AcademyLogo }}</td> -->
         <td>{{ data.AcademyFounded }}</td>

@@ -1,37 +1,32 @@
 <app-academypanel></app-academypanel>
 <div class="container">
-  <div style="position:fixed; top:40px;right:20px;z-index:999;"> <flash-messages></flash-messages> </div>
+  <div style="position:fixed; top:30px;right:20px;z-index:999;"> <flash-messages></flash-messages> </div>
   <form (submit) = "addCource()" *ngIf="!toggleForm" >
-    <h2 class="page-header" style="text-align:center;" id="f3">Course</h2>
+    <h2  style="text-align:center;margin-top:20px!important" id="f3">Course</h2>
     <br/>
  <div class="row">
         <div class="col-sm-4">
           <label style=" color: #696e7c!important;font-size: 14px!important;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;">ProgramType</label>
-          <select [(ngModel)]="ProgramType" name="ProgramType" class="pt">
+          <select [(ngModel)]="ProgramType" name="ProgramType" class="pt"  style="margin-bottom: 3%!important;margin-left:15%!important">
             <option value="">--Select ProgramType--</option>
             <option *ngFor="let type of ProgramTypeArray" [value]="type.id">{{type.name}}</option>
           </select>
         </div>
 
-        <div class="col-sm-4">
-          <!-- <label>Academy</label> -->
-          <select [(ngModel)]="AcademyId" name="AcademyId" class="dd" hidden=true>
-            <option value="">--Select Academy--</option>
-            <option *ngFor="let academy of Academy" [value]="academy._id">{{academy.AcademyName}}</option>
-          </select>
-        </div>
+
 
         <div class="col-sm-4">
           <label class="f1">ProgramDuration</label>
           <input type="number" [(ngModel)]="ProgramDuration" name="ProgramDuration" class="pd" >
         </div>
+        <div class="col-sm-4">
+          <label class="f1">ProgramName</label>
+          <input type="text" [(ngModel)]="ProgramName" name="ProgramName" class="pn" maxlength="50" style="margin-bottom: 3%!important;">
+        </div>
 </div>
 <div class="row">
 
-         <div class="col-sm-4">
-           <label class="f1">ProgramName</label>
-           <input type="text" [(ngModel)]="ProgramName" name="ProgramName" class="pn" maxlength="50">
-         </div>
+
 
         <div class="col-sm-4">
          <label class="f1">ProgramDescription</label>
@@ -43,15 +38,17 @@
          <input type="text" [(ngModel)]="ProgramSubject" name="ProgramSubject" class="ps" maxlength="50">
        </div>
 
+       <div class="col-sm-4">
+         <label class="f1">ProgramLocation</label>
+         <select [(ngModel)]="ProgramLocationId" name="ProgramLocationId" class="dd1" (change)="getLocationName($event)" style="margin-bottom: 3%!important;">
+           <option value="">--Select--</option>
+           <option *ngFor="let location of ProgramLocation" style="width: 170px!important;" [value]="location._id">{{location.Loc_name}}</option>
+         </select>
+       </div>
+
 </div>
 <div class="row">
-  <div class="col-sm-4">
-    <label class="f1">ProgramLocation</label>
-    <select [(ngModel)]="ProgramLocationId" name="ProgramLocationId" class="dd1" (change)="getLocationName($event)">
-      <option value="">--Select--</option>
-      <option *ngFor="let location of ProgramLocation" style="width: 170px!important;" [value]="location._id">{{location.Loc_name}}</option>
-    </select>
-  </div>
+
 
        <div class="col-sm-4">
          <label class="f1">Cost</label>
@@ -63,13 +60,15 @@
          <input type="date" [(ngModel)]="StartDate" name="StartDate" class="st" >
        </div>
 
+       <div class="col-sm-4">
+         <label class="f1">EndDate</label>
+         <input type="date" [(ngModel)]="EndDate" name="EndDate" class="st" style="margin-bottom: 3%!important;">
+       </div>
+
 
 </div>
   <div class="row">
-    <div class="col-sm-4">
-      <label class="f1">EndDate</label>
-      <input type="date" [(ngModel)]="EndDate" name="EndDate" class="st" >
-    </div>
+
 
     <div class="col-sm-4">
       <label class="f1">Length</label>
@@ -81,9 +80,6 @@
       <input type="number" [(ngModel)]="Classsize" name="Classsize" class="csize" maxlength="50">
     </div>
 
-  </div>
-
-  <div class="row">
     <div class="col-sm-4">
       <label class="f1">Career Services</label>
       <!-- <select [(ngModel)]="CareerServices" name="CareerServices" class="ser" style="margin-left: 12px;">
@@ -91,8 +87,13 @@
         <option value=true>Yes</option>
         <option value=false>No</option>
       </select> -->
-      <input type="checkbox" [(ngModel)]="CareerServices" name="CareerServices" class="ser" style="margin-left: 45px;">
+      <input type="checkbox" [(ngModel)]="CareerServices" name="CareerServices" class="ser" style="margin-left: 45px;margin-bottom: 4%!important;">
     </div>
+
+  </div>
+
+  <div class="row">
+
 
     <div class="col-sm-4">
       <label class="f1">Financing</label>
@@ -112,18 +113,19 @@
       </select> -->
       <input type="checkbox" [(ngModel)]="Scholarship" name="Scholarship" class="ser" style="margin-left: 44px;">
     </div>
-  </div>
-
-  <div class="row">
     <div class="col-sm-4">
       <label class="f1">Commitment</label>
       <input type="text" [(ngModel)]="Commitment" name="Commitment" class="cm" >
     </div>
   </div>
+
+  <div class="row">
+
+  </div>
 <br/>
 <div class="text-center">
-    <button type="submit" name="submit" class="btn btn-primary" style="width:70px;">Save </button>
-<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;">Clear</button>
+    <button type="submit" name="submit" class="btn btn-primary" style="width:70px;" id="f2">Save </button>
+<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;" id="f2">Clear</button>
 </div>
   </form>
 
@@ -238,6 +240,13 @@
     <label class="f2">Commitment</label>
     <input type="text" [ngModel]="cource.Commitment" name="Commitment" class="cm" >
   </div>
+  <div class="col-sm-4">
+    <!-- <label>Academy</label> -->
+    <select [(ngModel)]="AcademyId" name="AcademyId" class="dd" hidden=true>
+      <option value="">--Select Academy--</option>
+      <option *ngFor="let academy of Academy" [value]="academy._id">{{academy.AcademyName}}</option>
+    </select>
+  </div>
 </div>
   <br/>
     <div class="text-center">
@@ -249,7 +258,7 @@
 </div>
 
 <div class="col-md-12 text-center">
-  <h2 class="page-header" style="text-align:center;" id="f3"> Courses List </h2>
+  <h2 style="text-align:center;" id="f3"> Courses List </h2>
   <!-- start search bar   -->
   <div style="float:right;padding-bottom:5px;">
    <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Serch Here"/>

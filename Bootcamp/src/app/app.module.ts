@@ -34,6 +34,7 @@ import { AdminActivityComponent } from './admin-activity/admin-activity.componen
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { FirstUserComponent } from './first-user/first-user.component';
 
 const appRoutes:Routes = [
 {path:"",component:BootcampComponent},
@@ -59,7 +60,8 @@ const appRoutes:Routes = [
 {path:"academyInquiries",component:AcademyInquiryListComponent},
 {path:"profileupdate",component:ProfileupdateComponent},
 {path:"adminactivity",component:AdminActivityComponent},
-{path:"adminHome",component:AdminHomeComponent}
+{path:"adminHome",component:AdminHomeComponent},
+{path:"firstUser",component:FirstUserComponent}
 ]
 
 @NgModule({
@@ -90,7 +92,8 @@ const appRoutes:Routes = [
     AcademyInquiryListComponent,
     ProfileupdateComponent,
     AdminActivityComponent,
-    AdminHomeComponent
+    AdminHomeComponent,
+    FirstUserComponent
 ],
   imports: [
     BrowserModule,

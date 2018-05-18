@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <br><br>
 <div class="col-md-12 text-center">
-  <h2 class="page-header" style="text-align:center;"> Inquiry List </h2>
+  <h2  style="text-align:center;margin-top:50px!important;" id="f3"> Inquiry List </h2>
   <!-- start search bar   -->
   <div style="float:right;padding-bottom:5px;">
    <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Serch Here"/>
@@ -9,16 +9,16 @@
   </div>
   <!-- end search bar   -->
 <br/>
-  <table class="table table-bordered">
+  <table class="table table-bordered" style="border:1px solid black!important">
     <thead>
       <tr id="head" style="background-color:#12ACCF!important;">
-        <th>Date Time</th>
-        <th>Academy</th>
-        <th>Course</th>
-        <th>Phone</th>
-        <th>Email ID</th>
-        <th>Name</th>
-        <th>Notes</th>
+        <th id="f2">Date Time</th>
+        <th id="f2">Academy</th>
+        <th id="f2">Course</th>
+        <th id="f2">Phone</th>
+        <th id="f2">Email ID</th>
+        <th id="f2">Name</th>
+        <th id="f2">Notes</th>
       </tr>
     </thead>
       <tr *ngFor = "let inquiry of Inquiry | filter : SearchText | paginate:{itemsPerPage:10, currentPage:p}">

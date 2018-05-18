@@ -51,11 +51,17 @@ export class RegisterComponent implements OnInit {
         CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
       }
       this.RegisterService.addAcademy(Academy).subscribe(data=>{
-        if(data){
+        if(data.success){
           // this.flashMessage.show("Registered sucessfully!!!",{cssClass : 'alert-success',timeout:5000});
            this.router.navigate(['login']);
         }else{
-          this.flashMessage.show(data,{cssClass : 'alert-danger',timeout:5000});
+          if(data.defaultError){
+            this.flashMessage.show(data.defaultError,{cssClass:'alert-danger',timeout:5000});
+            return false;
+          }
+          var messageArray = data.error.split(":");
+          var error = messageArray[2].replace(/!.*/,"!");
+          this.flashMessage.show(error,{cssClass:'alert-danger',timeout:5000});
         }
       });
     }

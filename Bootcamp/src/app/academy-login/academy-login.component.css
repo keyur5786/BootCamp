@@ -43,6 +43,19 @@ border-color: #e7e7e700!important;
     background-color: #f8f8f8;
     border-color: #e7e7e700!important;
 } */
-
+#popUP{
+position:absolute;
+top:0px;
+left:0px;
+/* background: rgba(0,0,0,0.5); */
+text-align: center;
+ margin: auto;
+ padding: 20px;
+ background-color: #efd6c2!important;
+ /* background-color: #fff; */
+-webkit-transition: 0.5s;
+ overflow: auto;
+ transition: all 0.3s linear;
+}
 
 .btn{border-radius: 0px;}

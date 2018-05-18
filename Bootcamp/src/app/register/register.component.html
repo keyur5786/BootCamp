@@ -19,27 +19,27 @@
   </nav>
 
   <div class="col-md-9 container">
-    <div style="position:fixed; top:20px;"> <flash-messages></flash-messages> </div>
+    <div style="position:fixed; top:20px; z-index:999;"> <flash-messages></flash-messages> </div>
       <form (submit)="onRegister()">
   <div class="fmargin" align="center" style="padding-top:100px;">
     <div class="col-xs-3">
-    <label>EmailId</label>
+    <label class="f1">EmailId</label>
     <input  type="text" [(ngModel)]="EmailId" name="EmailId" style="margin-left: 77px;" >
   </div>
 
 <div class="col-xs-3">
-<label>Password</label>
+<label  class="f1">Password</label>
 <input  type="password"  [(ngModel)]="Password" name="Password" style="margin-left: 63px;">
 </div>
 
 <div class="col-xs-3">
-<label>ConfirmPassword</label>
+<label  class="f1">ConfirmPassword</label>
 <input  type="password"  [(ngModel)]="ConfirmPassword" name="ConfirmPassword" style="margin-left: 10px;">
 </div>
 <br/>
 <br/>
   <div class="text-center">
-  <button type="submit" name="submit" value="Register" class="btn btn-primary">Register</button>
+  <button type="submit" name="submit" value="Register" class="btn btn-primary" >Register</button>
 <button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;">Clear</button>
 </div>
 </div>

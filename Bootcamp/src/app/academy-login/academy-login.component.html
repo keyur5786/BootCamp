@@ -50,3 +50,15 @@
 
 </form>
 </div>
+
+<!-- style="position:fixed; top:10%; left:45%;width:30%;border:1px solid black; " -->
+<form style="z-index:999; position:absolute;align:center;top: 18%;left: 3%;width: 20%;" (submit)="SendOTP()" *ngIf="otpPopUp" id="popUP">
+  <div style="margin-left:20px!important;">
+    <small>Please, Check Email & Verify OTP</small>
+    <input type="text" placeholder="Enter Otp" [(ngModel)]="sendotp" name="sendotp">
+    <div class="text-center">
+      <br>
+    <button type="submit" name="submit" class="btn btn-primary" value="Submit" style="width: 80px;background-color: #12ACCF!important;">Submit</button>
+  </div>
+</div>
+</form>

@@ -43,3 +43,24 @@ vertical-align: middle;
     .dd{width: 173px;margin-left: 77px;height: 25px;}
 .ser{width: 173px;
     height: 25px;}
+    #f1{
+      color: #696e7c!important;
+      font-size: 14px!important;
+      ;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;
+
+    }
+    #f2{
+      font-size: 14px!important;
+      ;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;
+    }
+    #f3{
+      color: #696e7c!important;
+      font-size: 34px!important;
+      ;font-family: proxima-nova,Proxima Nova,Helvetica Neue,Helvetica,Open Sans,Arial,sans-serif!important;
+    }
+    input[type=checkbox] {
+
+    box-sizing: border-box;
+    width: 40px!important;
+    height: 20px!important;
+}

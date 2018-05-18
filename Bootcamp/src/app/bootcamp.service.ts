@@ -17,6 +17,11 @@ export class BootcampService {
    .map(res=>res.json());
  }
 
+ checkUser(){
+   return this.http.get(this.host+'/api/checkUser')
+   .map(res=>res.json());
+ }
+
   // search(term: string): Observable<any[]> {
   //         var Loc_List = this.http.get(this.endPoint + '?term=' + term)
   //             .map((r: Response) => { return (r.json().length != 0 ? r.json() : [{ "_Id": 0, "Loc_name": "No Record Found" }]) as any[] });

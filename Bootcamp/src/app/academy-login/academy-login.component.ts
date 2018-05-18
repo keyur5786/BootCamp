@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {FlashMessagesService} from 'angular2-flash-messages';
 import {AcademyLoginService} from '../academy-login.service';
+import { Register } from '../register';
+
 @Component({
   selector: 'app-academy-login',
   templateUrl: './academy-login.component.html',
@@ -11,7 +13,11 @@ import {AcademyLoginService} from '../academy-login.service';
 export class AcademyLoginComponent implements OnInit {
   Email:any;
   Password:any;
-
+  otpPopUp:boolean=false;
+  sendotp:string;
+  Auth_code:string;
+  tempCode:string;
+  tempEmail:string;
   constructor(
     private AcademyLoginService:AcademyLoginService,
     private router:Router,
@@ -41,7 +47,23 @@ export class AcademyLoginComponent implements OnInit {
           sessionStorage.setItem('isLogin',"True");
           localStorage.setItem('AcademyID', data[0]._id);
           localStorage.setItem('LoggerName',this.Email);
-          this.router.navigate(['academyRegister']);
+          if(data[0].isVerify==false){
+            var otp=Math.floor((Math.random() * 9999) + 1000);
+            // sessionStorage.setItem('OTP',otp.toString());
+            this.AcademyLoginService.sendOtp(data[0].EmailId,otp).subscribe(data1=>{
+              if(data1.success){
+                this.tempCode=otp.toString();
+                this.tempEmail=data[0].EmailId;
+                this.otpPopUp=true;
+                 //this.flashMessage.show("login sucessfully!!!",{cssClass : 'alert-success',timeout:5000});
+                 //this.router.navigate(['login']);
+              }else{
+                this.flashMessage.show(data1,{cssClass : 'alert-danger',timeout:5000});
+              }
+            });
+          }else{
+            this.router.navigate(['academyRegister']);
+          }
         }else{
           localStorage.setItem('AcademyID', data[0]._id);
           localStorage.removeItem('LoggerId');
@@ -52,6 +74,20 @@ export class AcademyLoginComponent implements OnInit {
         this.flashMessage.show(data,{cssClass : 'alert-danger',timeout:5000});
       }
     });
+  }
+
+  SendOTP(){
+
+    if(this.sendotp==this.tempCode){
+      this.AcademyLoginService.updateVerification(this.tempEmail)
+      .subscribe(data=>{
+        this.router.navigate(['academyRegister']);
+      });
+
+    }else{
+      this.flashMessage.show("OTP Varification Fail ! Try Again",{cssClass : 'alert-danger',timeout:5000});
+      this.otpPopUp=false;
+    }
   }
 
   clear(){

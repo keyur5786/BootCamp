@@ -67,6 +67,7 @@ export class AcademyComponent implements OnInit {
               // for(var i=0;i<Academy.length;i++){
               //   Academy[i]["TempLogo"] = "../../assets/"+Academy[i].AcademyLogo;
               // }
+              console.log(JSON.stringify(Academy));
               this.academies = Academy;
               this.AcademyName="";
               this.AcademyWebsite="";

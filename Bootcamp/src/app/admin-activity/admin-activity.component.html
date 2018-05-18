@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 <div class="col-md-12 text-center">
-  <h2 class="page-header" style="text-align:center; padding-top:60px;">Admin Activity Logs</h2>
+  <h2  style="text-align:center; padding-top:60px;" id="f3">Admin Activity Logs</h2>
   <!-- start search bar   -->
   <div style="float:right;padding-bottom:5px;">
    <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Search Here" />
@@ -11,11 +11,11 @@
   <table class="table table-bordered">
     <thead>
       <tr style="background-color: #12ACCF!important;" id="head">
-        <th> Date Time </th>
-        <th>User Name</th>
-        <th>User Type</th>
-        <th>Page Name</th>
-        <th>Action</th>
+        <th id="f2"> Date Time </th>
+        <th id="f2">User Name</th>
+        <th id="f2">User Type</th>
+        <th id="f2">Page Name</th>
+        <th id="f2">Action</th>
       </tr>
     </thead>
         <tr *ngFor = "let activity of Activity | filter : SearchText | paginate:{itemsPerPage:10, currentPage:p}" >

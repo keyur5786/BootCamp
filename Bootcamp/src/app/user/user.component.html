@@ -2,25 +2,25 @@
 <div class="container">
     <div style="position:fixed; top:100px; right:20px;z-index:999;"> <flash-messages></flash-messages> </div>
   <form (submit) = "addUser()" *ngIf="!toggleForm">
-      <h2 class="page-header" style="text-align:center;padding-top: 35px;">User</h2>
+      <h2  style="text-align:center;padding-top: 50px;" id="f3">User</h2>
       <br/>
       <div class="row">
-          <label class="un">FirstName </label>
-          <input type="text" [(ngModel)]="FirstName" name="FirstName"  class="un">
+          <label  id="f1" style="margin-left:2%!important;">FirstName </label>
+          <input type="text" [(ngModel)]="FirstName" name="FirstName"  style="margin-left:.5%!important;" >
 
-          <label class="un">LastName </label>
-          <input type="text" [(ngModel)]="LastName" name="LastName" class="un" >
+          <label  id="f1"  style="margin-left:2%!important;">LastName </label>
+          <input type="text" [(ngModel)]="LastName" name="LastName"  style="margin-left:.5%!important;" >
 
-          <label class="un">UserName </label>
-          <input type="text" [(ngModel)]="UserName" name="UserName" class="un" >
+          <label id="f1"  style="margin-left:2%!important;">UserName </label>
+          <input type="text" [(ngModel)]="UserName" name="UserName"  style="margin-left:.5%!important;"  >
 
-          <label class="un">Password </label>
-          <input type="password" [(ngModel)]="Password" name="Password" class="un"  >
+          <label  id="f1"  style="margin-left:2%!important;">Password </label>
+          <input type="password" [(ngModel)]="Password" name="Password"  style="margin-left:.5%!important;"  >
       </div>
 <br/>
 
 <div class="col-md-12">
-  <h2 class="page-header" style="text-align:center;">Rights List</h2>
+  <h2  style="text-align:center;" id="f3">Rights List</h2>
   <small> <input type="checkbox" (change)="checkAll()"> <b> Checked All </b> </small>
   <table class="table table-bordered ">
     <thead>
@@ -71,11 +71,11 @@
   <table class="table table-bordered ">
     <thead>
       <tr style="background-color: #12ACCF!important;">
-        <th>Form Name</th>
-        <th>Add</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th>View</th>
+        <th id="f2">Form Name</th>
+        <th id="f2">Add</th>
+        <th id="f2">Edit</th>
+        <th id="f2">Delete</th>
+        <th id="f2">View</th>
       </tr>
     </thead>
     <tbody>
@@ -96,16 +96,16 @@
 
 </div>
 <div class="text-center">
-<button type="submit" name="submit" class="btn btn-primary" align="center" style="width:70px;"> Save </button>
-<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;">Clear</button>
+<button type="submit" name="submit" class="btn btn-primary" align="center" style="width:70px;" id="f2"> Save </button>
+<button type="reset" name="submit" class="btn btn-primary"  value="Clear" style="width: 70px;" id="f2">Clear</button>
 </div>
 </form>
 <br/>
 </div>
 
 <div class="col-md-12">
-  <h2 class="page-header" style="text-align:center;">Users List</h2>
-  <div style="float:right;padding-bottom:5px;">
+  <h2 style="text-align:center;" id="f3">Users List</h2>
+  <div style="float:right;padding-bottom:3px!important;">
    <input type="text" [(ngModel)]="SearchText" name="search" placeholder="Search Here"/>
     <!-- <button (click)="GoForSearch()" ><b><i class="fa fa-search"></i>Search</b></button> -->
   </div>
@@ -113,11 +113,11 @@
     <thead>
       <tr style="background-color: #12ACCF!important;">
         <!-- <th>UserId</th> -->
-        <th> Date Time </th>
-        <th>FirstName</th>
-        <th>LastName</th>
-        <th>UserName</th>
-        <th>Action</th>
+        <th id="f2"> Date Time </th>
+        <th id="f2">FirstName</th>
+        <th id="f2">LastName</th>
+        <th id="f2">UserName</th>
+        <th id="f2">Action</th>
         <!-- <th>RoleId</th>
         <th>Delete</th>
         <th>Edit</th>-->

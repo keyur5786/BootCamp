@@ -5,13 +5,15 @@ const multer = require("multer");
 const moment = require("moment");
 const getIP = require('ipware')().get_ip;
 var fs = require('fs');
+var nodemailer = require('nodemailer');
 var LocalStorage = require('node-localstorage').LocalStorage;
 localStorage = new LocalStorage('./scratch');
 
 const storage = multer.diskStorage({
     // set uploads folder
     destination: (req, file, cb) => {
-        cb(null, './Bootcamp/src/assets/');
+        // cb(null, './Bootcamp/src/assets/');
+        cb(null, './uploads');
     },
     // set default filename
     filename: (req, file, cb) => {
@@ -58,10 +60,10 @@ const Status=require("../models/program-status");
 const Registers=require("../models/register");
 const Inquiry=require("../models/inquiry");
 const ActivityLog = require("../models/activityLog");
+const path = require("path");
 // For User
 // Retrive Data
 router.get('/users',(req,res,next)=>{
-
   User.find()
   .sort({CreatedOn:-1})
   .then(User=>{
@@ -303,6 +305,11 @@ router.get('/academies',(req,res,next)=>{
   Academy.find()
   .sort({CreatedOn:-1})
   .then(Academy=>{
+    // for(var i=0;i<Academy.length;i++){
+    //   var imgpath = path.join(__dirname,'../uploads')+'/'+Academy[i].AcademyLogo;
+    //   Academy[i].imgPath= imgpath;
+    //   console.log(Academy[i]);
+    // }
     res.json(Academy);
   })
   .catch(err=>{
@@ -874,6 +881,49 @@ router.get('/authenticate/:UserName/:Password',(req,res,next)=>{
   });
   });
 
+  router.get('/verifyUpdate/:email',(req,res,next)=>{
+    Academy.findOneAndUpdate({EmailId:req.params.email},{$set:{isVerify:true}})
+    .then(data=>{
+      res.json({"success":"Veryfied Update"});
+    })
+    .catch(err=>{
+      console.log(err);
+    });
+  });
+  // for sending otp through mail
+  router.get('/otpverify/:email/:otp',(req,res,next)=>{
+    Academy.findOneAndUpdate({EmailId:req.params.email},{$set:{Auth_code:req.params.otp}})
+    .then(data=>{
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'rkwst10@gmail.com',
+          pass: 'Rkwebsoft@456'
+        }
+      });
+
+      var mailOptions = {
+        from: 'rkwst10@gmail.com',
+        to: req.params.email,
+        // req.params.email,
+        subject: 'Otp verification',
+        text: req.params.otp,
+      };
+
+    transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.json({"success":"Email Sent"});
+    }
+  });
+    })
+    .catch(err=>{
+      console.log(err);
+    });
+});
+
   router.post('/authenticateAcademy',(req,res,next)=>{
     console.log("From Route "+JSON.stringify(req.body));
     Academy.find({EmailId:req.body.Email,Password:req.body.Password}).exec()
@@ -1076,11 +1126,8 @@ router.post('/Registers',(req,res,next)=>{
     CreatedIp : getIP(req).clientIp,
     CreatedOn : moment().format("DD-MM-YYYY HH:mm:ss")
   });
-  newAcademy.save((err,academy)=>{
-    if(err){
-      console.log(err);
-      res.json({msg:'Failed To Add Academy : '+err});
-    }else{
+  newAcademy.save()
+  .then(academy=>{
       let newActivityLog = new ActivityLog({
         UserId : req.body.CreatedBy,
         UserName : req.body.EmailId,
@@ -1093,7 +1140,7 @@ router.post('/Registers',(req,res,next)=>{
       });
       newActivityLog.save()
       .then(activity=>{
-        res.json("Data Saved "+academy);
+        res.status(200).json({"success":"Inquiry Submitted Successfully !"});
       })
       .catch(err=>{
         if(err.code === 11000){
@@ -1104,6 +1151,14 @@ router.post('/Registers',(req,res,next)=>{
           res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
         }
       });
+  })
+  .catch(err=>{
+    if(err.code === 11000){
+        var duplicateValue = err.message.match(/".*"/);
+        res.status(200).json({"defaultError":duplicateValue[0]+" Is Already Exsist !"});
+    }
+    else{
+      res.status(200).json({"error":err.message}||{"defaultError":'Error But Can Not Understood !'});
     }
   });
 });
@@ -1146,7 +1201,7 @@ router.put('/RegisterAcademy',(req,res,next)=>{
         });
         newActivityLog.save()
         .then(activity=>{
-          res.status(200).json({"success":"Academy Profile Save Successfully !"});
+          res.status(200).json({"success":"Academy Profile Save Successfully !","academyName":req.body.AcademyName});
         })
         .catch(err=>{
           if(err.code === 11000){
@@ -1787,6 +1842,16 @@ router.put('/deactivateLocation',function(req,res,next){
         });
       }
     });
+});
+
+router.get('/checkUser',function(req,res,next){
+  User.find()
+  .then(user=>{
+    res.json(user.length);
+  })
+  .catch(err=>{
+    res.json(err);
+  });
 });
 
 module.exports = router;

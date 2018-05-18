@@ -56,7 +56,7 @@ const AcademySchema = mongoose.Schema({
 				 },
 				 message: '{VALUE} Is Invalid Email !'
 			 },
-	unique: [true]
+	unique: true
 	},
 
 	Password:{
@@ -64,6 +64,15 @@ const AcademySchema = mongoose.Schema({
 	required: [true,'Password Is Required Field !'],
 	maxlength: [20,'Password Should Be Less Then 20 Digit !'],
 	minlength: [6,'Password Should Be Atleast 6 Digit !']
+	},
+
+	Auth_code : {
+		type: String,
+	},
+
+	isVerify : {
+		type: Boolean,
+		default: false
 	},
 
   CreatedBy : {

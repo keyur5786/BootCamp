@@ -19,11 +19,19 @@ export class BootcampComponent implements OnInit {
     cources:any;
   constructor(private BootcampService:BootcampService,private router: Router) { }
    ngOnInit(){
-     this.BootcampService.getData()
-     .subscribe(data=>{
-       localStorage.clear();
-       this.cources = data[0];
-       this.locations = data[2];
+     this.BootcampService.checkUser()
+     .subscribe(user=>{
+       if(user>=1){
+         this.BootcampService.getData()
+         .subscribe(data=>{
+           localStorage.clear();
+           this.cources = data[0];
+           this.locations = data[2];
+         });
+       }else{
+         sessionStorage.setItem("firstUser","Yes");
+         this.router.navigate(['/firstUser']);
+       }
      });
    }
 
